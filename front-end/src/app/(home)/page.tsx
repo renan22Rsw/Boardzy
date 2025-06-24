@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { HomeSection } from "./_components/home-section";
+import Link from "next/link";
 
 const Home = () => {
   return (
@@ -15,9 +16,11 @@ const Home = () => {
             in one place. With Boardzy, turning ideas into action has never been
             easier.
           </p>
-          <Button className="cursor-pointer font-semibold">
-            Get Started with Boardzy
-          </Button>
+          <Link href={"/dashboard"}>
+            <Button className="cursor-pointer font-semibold">
+              Get Started with Boardzy
+            </Button>
+          </Link>
         </div>
       </div>
     </main>

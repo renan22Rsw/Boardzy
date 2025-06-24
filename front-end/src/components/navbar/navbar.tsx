@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const NavBar = () => {
   return (
-    <nav className="flex justify-between p-4 shadow-lg dark:shadow-none">
+    <nav className="flex justify-between border-2 p-4">
       <div className="flex items-center">
         <Image src={BoardzyLogo} width={50} height={50} alt="Boardzy Logo" />
         <Link href={"/"}>
