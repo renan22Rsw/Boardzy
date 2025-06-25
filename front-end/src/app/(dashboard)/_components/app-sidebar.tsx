@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -15,6 +17,8 @@ import {
 } from "@/components/ui/accordion";
 
 import { Activity, Settings, CreditCard, Layout } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const workspaces = [
   {
@@ -47,8 +51,10 @@ const workspaces = [
 ];
 
 export const AppSidebar = () => {
+  const pathName = usePathname().split("/")[2];
+
   return (
-    <Sidebar variant="sidebar">
+    <Sidebar variant="sidebar" className="pt-4">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="font-bold">
@@ -63,7 +69,7 @@ export const AppSidebar = () => {
           <Accordion
             type="single"
             key={workspaces.id}
-            className="px-2"
+            className="px-4"
             collapsible
           >
             <AccordionItem value={workspaces.title}>
@@ -75,7 +81,11 @@ export const AppSidebar = () => {
                 {workspaces.projects.map((project) => (
                   <SidebarMenuItem
                     key={project.id}
-                    className="flex cursor-pointer items-center gap-2 rounded-md py-3 font-semibold text-zinc-800 transition duration-150 ease-out hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                    className={cn(
+                      pathName === project.label.toLowerCase() &&
+                        "bg-zinc-100 dark:bg-zinc-800",
+                      "flex cursor-pointer items-center gap-2 rounded-md py-3 font-semibold text-zinc-800 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800",
+                    )}
                   >
                     {project.icon}
                     {project.label}

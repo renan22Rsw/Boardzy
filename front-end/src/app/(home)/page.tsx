@@ -16,7 +16,7 @@ const Home = () => {
             in one place. With Boardzy, turning ideas into action has never been
             easier.
           </p>
-          <Link href={"/dashboard"}>
+          <Link href={"/organizations/boards"}>
             <Button className="cursor-pointer font-semibold">
               Get Started with Boardzy
             </Button>
