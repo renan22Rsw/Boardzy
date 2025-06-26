@@ -19,18 +19,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { workspaceSchema } from "@/schemas/workspace-schema";
 
-export const CreateWorkspaceDialog = () => {
+export const CreateWorkspaceDialog = ({
+  trigger,
+}: {
+  trigger: React.ReactNode;
+}) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-
-  const workspaceSchema = z.object({
-    workspace: z
-      .string()
-      .min(3, "Workspace name must be at least 3 characters long"),
-  });
 
   const form = useForm<z.infer<typeof workspaceSchema>>({
     resolver: zodResolver(workspaceSchema),
@@ -46,9 +44,7 @@ export const CreateWorkspaceDialog = () => {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
-        <Plus className="h-4 w-4" cursor={"pointer"} />
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger}</DialogTrigger> {/* Trigger */}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create new workspace</DialogTitle>

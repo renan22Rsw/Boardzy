@@ -16,7 +16,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { Activity, Settings, CreditCard, Layout } from "lucide-react";
+import { Activity, Settings, CreditCard, Layout, Plus } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -60,8 +60,10 @@ export const AppSidebar = () => {
           <SidebarGroupLabel className="font-bold">
             Workspacess
           </SidebarGroupLabel>
-          <SidebarGroupAction title="Add Project">
-            <CreateWorkspaceDialog />
+          <SidebarGroupAction title="Add Project" className="hidden lg:block">
+            <CreateWorkspaceDialog
+              trigger={<Plus className="h-4 w-4" cursor={"pointer"} />}
+            />
             <span className="sr-only">Add Project</span>
           </SidebarGroupAction>
         </SidebarGroup>

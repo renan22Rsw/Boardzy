@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
-import BoardzyLogo from "../../../public/boardzy-logo.png";
+import BoardzyLogo from "@/assets/boardzy-logo.png";
 import Link from "next/link";
 
 export const NavBar = () => {

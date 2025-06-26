@@ -22,11 +22,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BoardColorPicker } from "./board-color-picker";
-
-export const boardSchema = z.object({
-  board: z.string().min(3, "Board name must be at least 3 characters long"),
-  boardColor: z.string().min(4, "Board color must be selected"),
-});
+import { boardSchema } from "@/schemas/board-schema";
 
 export const CreateBoard = ({ boardRemaning }: { boardRemaning: number }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>();

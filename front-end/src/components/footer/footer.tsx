@@ -1,5 +1,5 @@
 import Image from "next/image";
-import BoardzyLogo from "../../../public/boardzy-logo.png";
+import BoardzyLogo from "@/assets/boardzy-logo.png";
 import { social } from "./social";
 import Link from "next/link";
 import { FooterTheme } from "./theme";
