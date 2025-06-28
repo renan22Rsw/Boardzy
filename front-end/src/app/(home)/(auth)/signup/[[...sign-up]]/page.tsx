@@ -1,5 +1,5 @@
-import { AuthCard } from "../_components/auth-card";
-import { SignUpForm } from "./_components/signup-form";
+import { AuthCard } from "../../_components/auth-card";
+import { SignUpForm } from "../_components/signup-form";
 
 const SignUp = () => {
   return (

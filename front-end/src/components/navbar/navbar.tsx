@@ -2,8 +2,12 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import BoardzyLogo from "@/assets/boardzy-logo.png";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { UserButton } from "@clerk/nextjs";
 
-export const NavBar = () => {
+export const NavBar = async () => {
+  const { userId } = await auth();
+
   return (
     <nav className="flex justify-between border-2 p-4">
       <div className="flex items-center">
@@ -15,14 +19,20 @@ export const NavBar = () => {
         </Link>
       </div>
       <div className="space-x-2">
-        <Link href={"/signup"}>
-          <Button variant={"ghost"} className="cursor-pointer">
-            Sign Up
-          </Button>
-        </Link>
-        <Link href={"/login"}>
-          <Button className="cursor-pointer font-bold">Login</Button>
-        </Link>
+        {!userId ? (
+          <>
+            <Link href={"/signup"}>
+              <Button variant={"ghost"} className="cursor-pointer">
+                Sign Up
+              </Button>
+            </Link>
+            <Link href={"/login"}>
+              <Button className="cursor-pointer font-bold">Login</Button>
+            </Link>
+          </>
+        ) : (
+          <UserButton />
+        )}
       </div>
     </nav>
   );

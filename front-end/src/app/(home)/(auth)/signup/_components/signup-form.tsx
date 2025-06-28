@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useSignUp } from "@clerk/nextjs";
 import {
   Form,
   FormControl,
@@ -13,8 +14,16 @@ import { signupSchema } from "@/schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { AuthErrorMessage } from "../../_components/auth-error-message";
+import { useState } from "react";
+import { ClerkError } from "@/types/clerk-error";
 
 export const SignUpForm = () => {
+  const { isLoaded, signUp, setActive } = useSignUp();
+  const [errMsg, setErrMsg] = useState("");
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -25,8 +34,33 @@ export const SignUpForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof signupSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof signupSchema>) => {
+    setErrMsg("");
+    if (!isLoaded) return;
+
+    try {
+      const validatedFields = signupSchema.safeParse(data);
+
+      if (!validatedFields.success) {
+        throw new Error(validatedFields.error.message as string);
+      }
+      const { name, email, password } = validatedFields.data;
+
+      const result = await signUp.create({
+        firstName: name.split(" ")[0],
+        lastName: name.split(" ").slice(1).join(" ") || "",
+        emailAddress: email,
+        password: password,
+      });
+
+      if (result.status === "complete") {
+        setActive({ session: result.createdSessionId });
+        router.push("/");
+      }
+    } catch (err) {
+      const error = err as ClerkError;
+      setErrMsg(error.errors[0].message);
+    }
   };
 
   return (
@@ -72,6 +106,7 @@ export const SignUpForm = () => {
             <FormItem>
               <FormControl>
                 <Input
+                  type="password"
                   placeholder="Password"
                   {...field}
                   className="md:w-[300px]"
@@ -89,6 +124,7 @@ export const SignUpForm = () => {
             <FormItem>
               <FormControl>
                 <Input
+                  type="password"
                   placeholder="Confirm Password"
                   {...field}
                   className="md:w-[300px]"
@@ -98,6 +134,11 @@ export const SignUpForm = () => {
             </FormItem>
           )}
         />
+
+        <div id="clerk-captcha"></div>
+
+        {errMsg.length > 0 && <AuthErrorMessage msg={errMsg} />}
+
         <Button type="submit" className="w-[150px] cursor-pointer font-bold">
           Sign Up
         </Button>
