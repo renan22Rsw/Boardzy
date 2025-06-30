@@ -52,7 +52,7 @@ export const LoginForm = () => {
 
       if (result.status === "complete") {
         setActive({ session: result.createdSessionId });
-        router.push("/");
+        router.push("/organizations/boards");
       }
     } catch (err) {
       const error = err as ClerkError;

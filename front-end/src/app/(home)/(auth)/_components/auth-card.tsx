@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { AuthContainer } from "./auth-container";
 
-import { FcGoogle } from "react-icons/fc";
 import { ReactNode } from "react";
 import Link from "next/link";
+import { GoogleButton } from "./google-button";
 
 interface AuthCardProps {
   authForm: ReactNode;
@@ -46,10 +46,7 @@ export const AuthCard = ({
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
             {authFormTitle}
           </h2>
-          <Button className="cursor-pointer" variant={"outline"}>
-            <FcGoogle />
-            <p className="text-sm italic">{googleDescription} with google</p>
-          </Button>
+          <GoogleButton googleDescription={googleDescription} />
           <span className="px-4 text-center text-sm text-zinc-500">
             {authOptionDescription}
           </span>

@@ -12,7 +12,7 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   if (userId && isPublicRoute(req)) {
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/organizations/boards", req.url));
   }
 });
 
