@@ -10,43 +10,45 @@ import { Activity, CreditCard, Layout, Settings } from "lucide-react";
 import Image from "next/image";
 
 interface AccordianItemsProps {
-  id: string;
+  pathname: string;
   organization: Organization;
 }
 
-const workspaces = [
-  {
-    id: 1,
-    label: "Boards",
-    icon: <Layout size={16} />,
-  },
-  {
-    id: 2,
-    label: "Activity",
-    icon: <Activity size={16} />,
-  },
+export const AccordianItems = ({
+  pathname,
+  organization,
+}: AccordianItemsProps) => {
+  const workspaces = [
+    {
+      id: 1,
+      label: "Boards",
+      icon: <Layout size={16} />,
+      href: `/organizations/${organization.id}`,
+    },
+    {
+      id: 2,
+      label: "Activity",
+      icon: <Activity size={16} />,
+      href: `/organizations/${organization.id}/activity`,
+    },
 
-  {
-    id: 3,
-    label: "Settings",
-    icon: <Settings size={16} />,
-  },
-  {
-    id: 4,
-    label: "Billing",
-    icon: <CreditCard size={16} />,
-  },
-];
+    {
+      id: 3,
+      label: "Settings",
+      icon: <Settings size={16} />,
+      href: `/organizations/${organization.id}/settings`,
+    },
+    {
+      id: 4,
+      label: "Billing",
+      icon: <CreditCard size={16} />,
+      href: `/organizations/${organization.id}/billing`,
+    },
+  ];
 
-export const AccordianItems = ({ id, organization }: AccordianItemsProps) => {
   return (
     <AccordionItem value={organization.id}>
-      <AccordionTrigger
-        className={cn(
-          id === organization.id && "bg-violet-100 dark:bg-violet-900",
-          "cursor-pointer px-4 font-bold text-zinc-600 dark:text-zinc-200",
-        )}
-      >
+      <AccordionTrigger className="cursor-pointer px-4 font-bold text-zinc-600 dark:text-zinc-200">
         <div className="flex items-center gap-2">
           <Image
             src={organization.imageUrl}
@@ -63,7 +65,10 @@ export const AccordianItems = ({ id, organization }: AccordianItemsProps) => {
         {workspaces.map((project) => (
           <SidebarMenuItem
             key={project.id}
-            className="flex cursor-pointer items-center gap-2 rounded-md px-4 py-3 font-semibold text-zinc-800 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800"
+            className={cn(
+              pathname === project.href ? "bg-zinc-100 dark:bg-zinc-800" : "",
+              "flex cursor-pointer items-center gap-2 rounded-md px-4 py-3 font-semibold text-zinc-800 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800",
+            )}
           >
             {project.icon}
             {project.label}

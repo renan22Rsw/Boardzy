@@ -15,10 +15,11 @@ import { CreateWorkspace } from "./create-workspace";
 import { AccordianItems } from "./accordian-items";
 import { Organization } from "@/types/organization";
 import { usePathname } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const AppSidebar = () => {
   const { isLoaded } = useOrganization();
-  const pathName = usePathname().split("/")[2];
+  const pathName = usePathname();
 
   const { userMemberships, isLoaded: isUserMembershipsLoaded } =
     useOrganizationList({
@@ -28,7 +29,14 @@ export const AppSidebar = () => {
     });
 
   if (!isLoaded || !isUserMembershipsLoaded || userMemberships.isLoading) {
-    return <div>Loading....</div>;
+    return (
+      <>
+        <Skeleton className="w-[255px]" />
+        {userMemberships.data?.map((_, index) => (
+          <Skeleton className="h-[62px] w-[255x]" key={index} />
+        ))}
+      </>
+    );
   }
 
   return (
@@ -46,7 +54,7 @@ export const AppSidebar = () => {
         <Accordion type="multiple">
           {userMemberships.data.map(({ organization }) => (
             <AccordianItems
-              id={pathName as string}
+              pathname={pathName as string}
               key={organization?.id}
               organization={organization as Organization}
             />

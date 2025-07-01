@@ -1,6 +1,6 @@
 import { User } from "lucide-react";
-import { CreateBoard } from "./_components/create-board";
-import { BoardDropdown } from "./_components/board-dropdown";
+import { BoardDropdown } from "./board-dropdown";
+import { CreateBoard } from "./create-board";
 
 interface Boards {
   id: number;
