@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Organization } from "@/types/organization";
 import { Activity, CreditCard, Layout, Settings } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface AccordianItemsProps {
   pathname: string;
@@ -63,16 +64,17 @@ export const AccordianItems = ({
 
       <AccordionContent>
         {workspaces.map((project) => (
-          <SidebarMenuItem
-            key={project.id}
-            className={cn(
-              pathname === project.href ? "bg-zinc-100 dark:bg-zinc-800" : "",
-              "flex cursor-pointer items-center gap-2 rounded-md px-4 py-3 font-semibold text-zinc-800 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800",
-            )}
-          >
-            {project.icon}
-            {project.label}
-          </SidebarMenuItem>
+          <Link key={project.id} href={project.href}>
+            <SidebarMenuItem
+              className={cn(
+                pathname === project.href ? "bg-zinc-100 dark:bg-zinc-800" : "",
+                "flex cursor-pointer items-center gap-2 rounded-md px-4 py-3 font-semibold text-zinc-800 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800",
+              )}
+            >
+              {project.icon}
+              {project.label}
+            </SidebarMenuItem>
+          </Link>
         ))}
       </AccordionContent>
     </AccordionItem>

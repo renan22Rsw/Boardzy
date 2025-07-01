@@ -29,14 +29,7 @@ export const AppSidebar = () => {
     });
 
   if (!isLoaded || !isUserMembershipsLoaded || userMemberships.isLoading) {
-    return (
-      <>
-        <Skeleton className="w-[255px]" />
-        {userMemberships.data?.map((_, index) => (
-          <Skeleton className="h-[62px] w-[255x]" key={index} />
-        ))}
-      </>
-    );
+    return <Skeleton />;
   }
 
   return (

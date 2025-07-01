@@ -55,7 +55,7 @@ export const SignUpForm = () => {
 
       if (result.status === "complete") {
         setActive({ session: result.createdSessionId });
-        router.push("/organizations/boards");
+        router.push("/select-org");
       }
     } catch (err) {
       const error = err as ClerkError;
