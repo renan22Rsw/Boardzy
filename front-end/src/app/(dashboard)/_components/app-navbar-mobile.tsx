@@ -1,7 +1,6 @@
 "use client";
 
 import { useIsMobile } from "@/hooks/use-mobile";
-import { CreateWorkspaceDialog } from "./create-workspace";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -11,9 +10,11 @@ export const AppNavbarMobile = () => {
   return (
     <>
       {isMobile ? (
-        <CreateWorkspaceDialog
-          trigger={<Button className="font-semibold">Create</Button>}
-        />
+        <Button>
+          <Link href={"/select-org"} className="font-bold">
+            Create
+          </Link>
+        </Button>
       ) : (
         <Link href={"/"}>
           <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-200">

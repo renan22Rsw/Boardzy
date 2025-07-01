@@ -1,9 +1,9 @@
 import Image from "next/image";
 import BoardzyLogo from "@/assets/boardzy-logo.png";
-import { Button } from "@/components/ui/button";
+
 import { AppSideBarTrigger } from "./app-sidebar-trigger";
 import { AppNavbarMobile } from "./app-navbar-mobile";
-import { UserButton } from "@clerk/nextjs";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
 export const AppNavbar = () => {
   return (
@@ -14,7 +14,12 @@ export const AppNavbar = () => {
       </div>
       <div className="flex items-center gap-2">
         <AppSideBarTrigger />
-        <Button variant={"ghost"}>Lorem Inc</Button>
+        <OrganizationSwitcher
+          hidePersonal
+          afterSelectOrganizationUrl="/organizations/:id"
+          afterLeaveOrganizationUrl="/select-org"
+          afterCreateOrganizationUrl="/organizations/:id"
+        />
         <UserButton />
       </div>
     </nav>

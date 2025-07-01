@@ -8,7 +8,7 @@ export const GoogleButton = ({
   googleDescription: string;
 }) => {
   return (
-    <SignInButton>
+    <SignInButton mode="modal">
       <Button className="cursor-pointer" variant={"outline"}>
         <FcGoogle />
         <p className="text-sm italic">{googleDescription} with google</p>

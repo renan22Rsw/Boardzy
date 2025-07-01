@@ -17,7 +17,7 @@ export const BoardHeader = () => {
           <h3 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100">
             Lorem Inc.
           </h3>
-          <span className="flex items-center gap-1 text-sm text-zinc-300">
+          <span className="flex items-center gap-1 text-sm text-zinc-800 dark:text-zinc-300">
             <CreditCard size={16} />
             Free
           </span>

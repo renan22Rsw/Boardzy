@@ -1,11 +1,14 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isProtectedRoute = createRouteMatcher(["/organizations(.*)"]);
+const isProtectedRoute = createRouteMatcher([
+  "/organizations(.*)",
+  "/select-org",
+]);
 const isPublicRoute = createRouteMatcher(["/signup", "/login"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+  const { userId, orgId } = await auth();
 
   if (!userId && isProtectedRoute(req)) {
     return NextResponse.redirect(new URL("/signup", req.url));
@@ -13,6 +16,10 @@ export default clerkMiddleware(async (auth, req) => {
 
   if (userId && isPublicRoute(req)) {
     return NextResponse.redirect(new URL("/organizations/boards", req.url));
+  }
+
+  if (userId && !orgId && req.nextUrl.pathname !== "/select-org") {
+    return NextResponse.redirect(new URL("/select-org", req.url));
   }
 });
 
