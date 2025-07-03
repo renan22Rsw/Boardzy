@@ -1,26 +1,26 @@
-import Fastify from "fastify";
+import express from "express";
 import dotenv from "dotenv";
-import { boardsRoute } from "./routes/boards-route";
+import cors from "cors";
+import { clerkMiddleware } from "@clerk/express";
+import { router } from "./routes/boards-route";
 
 dotenv.config();
 
-const fastify = Fastify({
-  logger: true,
-});
-
+const app = express();
 const PORT = process.env.PORT || 8000;
-
-fastify.register(boardsRoute);
-
-fastify
-  .listen({
-    port: PORT as number,
-    host: "0.0.0.0",
+app.use(express.json());
+app.use(
+  cors({
+    origin: process.env.ORIGIN_URL,
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
   })
-  .then(() => {
-    console.log(`Server running at port ${PORT}`);
-  })
-  .catch((err) => {
-    fastify.log.error(err);
-    process.exit(1);
-  });
+);
+app.use(clerkMiddleware());
+
+app.use(router);
+
+app.listen(PORT, () => {
+  console.log(`Example app listening at http://localhost:${PORT}`);
+});
