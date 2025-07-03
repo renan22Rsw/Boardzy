@@ -41,3 +41,8 @@
 /front-end/*.tsbuildinfo
 /front-end/next-env.d.ts
 
+
+# === BACK-END ===
+
+/back-end/node_modules
+/back-end/.env*
