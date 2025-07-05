@@ -19,7 +19,7 @@ app.use(
 );
 app.use(clerkMiddleware());
 
-app.use(router);
+app.use("/api", router);
 
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`);

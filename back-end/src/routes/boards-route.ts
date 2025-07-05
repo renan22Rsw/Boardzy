@@ -1,21 +1,21 @@
-import { clerkClient, getAuth, requireAuth } from "@clerk/express";
 import express from "express";
-import { Request, Response } from "express";
+import { requireAuth } from "@clerk/express";
+import { BoardService } from "../services/board-service";
+import { BoardController } from "../controllers/board-controller";
 
 export const router = express.Router();
 
-router.get(
-  "/boards",
-  requireAuth(),
-  async (req: Request, res: Response): Promise<any> => {
-    try {
-      const { userId } = getAuth(req);
+const boardService = new BoardService();
+const boardController = new BoardController(boardService);
 
-      const user = await clerkClient.users.getUser(userId as string);
-
-      return res.json({ user });
-    } catch (err) {
-      res.status(500).json({ error: err });
-    }
-  }
+router.post("/boards", requireAuth(), (req, res) =>
+  boardController.createBoard(req, res)
 );
+
+router.get("/boards", requireAuth(), (req, res) =>
+  boardController.getBoards(req, res)
+);
+
+router.delete("/boards/:id", requireAuth(), (req, res) => {
+  boardController.deleteBoard(req, res);
+});
