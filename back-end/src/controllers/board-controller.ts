@@ -44,9 +44,27 @@ export class BoardController {
     }
   }
 
+  async updateBoardTitle(req: Request, res: Response): Promise<any> {
+    try {
+      const { title } = req.body as { title: string };
+      const { id } = req.params as { id: string };
+      await this.boardServices.updateBoardTitle(id, title);
+
+      return res.send({
+        message: "Your board title has been updated",
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).send({
+          error: err.message,
+        });
+      }
+      return res.status(500).send({ error: "Unexpected error" });
+    }
+  }
+
   async deleteBoard(req: Request, res: Response) {
     try {
-      //   const { title } = req.body as { title: string };
       const { id } = req.params as { id: string };
 
       await this.boardServices.deleteBoard(id);

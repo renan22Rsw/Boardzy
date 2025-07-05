@@ -41,6 +41,24 @@ export class BoardService {
     }
   }
 
+  async updateBoardTitle(id: string, title: string) {
+    try {
+      await db.board.update({
+        where: {
+          id,
+        },
+        data: {
+          title,
+        },
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        throw Error(err.message);
+      }
+      throw new Error("Unexpected error");
+    }
+  }
+
   async deleteBoard(id: string) {
     try {
       await db.board.delete({

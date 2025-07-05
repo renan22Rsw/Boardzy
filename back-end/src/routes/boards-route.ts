@@ -8,14 +8,16 @@ export const router = express.Router();
 const boardService = new BoardService();
 const boardController = new BoardController(boardService);
 
-router.post("/boards", requireAuth(), (req, res) =>
-  boardController.createBoard(req, res)
+router.use(requireAuth());
+
+router.post("/boards", (req, res) => boardController.createBoard(req, res));
+
+router.get("/boards", (req, res) => boardController.getBoards(req, res));
+
+router.patch("/boards/:id", (req, res) =>
+  boardController.updateBoardTitle(req, res)
 );
 
-router.get("/boards", requireAuth(), (req, res) =>
-  boardController.getBoards(req, res)
-);
-
-router.delete("/boards/:id", requireAuth(), (req, res) => {
+router.delete("/boards/:id", (req, res) => {
   boardController.deleteBoard(req, res);
 });
