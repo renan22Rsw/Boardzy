@@ -23,21 +23,50 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BoardColorPicker } from "./board-color-picker";
 import { boardSchema } from "@/schemas/board-schema";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const CreateBoard = ({ boardRemaning }: { boardRemaning: number }) => {
-  const [dialogOpen, setDialogOpen] = useState<boolean>();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const { getToken, orgId } = useAuth();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof boardSchema>>({
     resolver: zodResolver(boardSchema),
     defaultValues: {
-      board: "",
-      boardColor: "#8000ff",
+      title: "",
+      color: "#8000ff",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof boardSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof boardSchema>) => {
+    const { title, color } = data;
     setDialogOpen(false);
+
+    try {
+      const token = await getToken();
+      const response = await fetch("/api/boards", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title, color, orgId }),
+      });
+
+      const data = await response.json();
+      toast.success(data.message);
+      router.refresh();
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+
+      toast.error("Something went wrong", {
+        description: "Please try again later",
+      });
+    }
   };
 
   return (
@@ -45,7 +74,10 @@ export const CreateBoard = ({ boardRemaning }: { boardRemaning: number }) => {
       <DialogTrigger asChild>
         <div className="h-[80px] cursor-pointer rounded-md bg-zinc-100 pt-2 text-center lg:w-[240px] dark:bg-zinc-800">
           <h6 className="px-2 font-semibold">Create new board</h6>
-          <span>{boardRemaning === 0 ? 5 : 5 - boardRemaning} remaining</span>
+          <span>
+            {boardRemaning === 0 || !boardRemaning ? 5 : 5 - boardRemaning}{" "}
+            remaining
+          </span>
         </div>
       </DialogTrigger>
       <DialogContent>
@@ -57,7 +89,7 @@ export const CreateBoard = ({ boardRemaning }: { boardRemaning: number }) => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="boardColor"
+              name="color"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -73,7 +105,7 @@ export const CreateBoard = ({ boardRemaning }: { boardRemaning: number }) => {
 
             <FormField
               control={form.control}
-              name="board"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -87,7 +119,9 @@ export const CreateBoard = ({ boardRemaning }: { boardRemaning: number }) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Create board</Button>
+            <Button type="submit" className="cursor-pointer">
+              Create board
+            </Button>
           </form>
         </Form>
       </DialogContent>

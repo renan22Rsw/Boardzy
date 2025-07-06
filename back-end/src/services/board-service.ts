@@ -5,6 +5,16 @@ export class BoardService {
     try {
       if (!orgId) throw new Error("Organization Id is required");
 
+      const boardLength = await db.board.count({
+        where: {
+          orgId,
+        },
+      });
+
+      if (boardLength >= 5) {
+        throw new Error("You have reached the maximum number of boards");
+      }
+
       const board = await db.board.create({
         data: {
           title,

@@ -10,13 +10,11 @@ export class BoardController {
       const { orgId } = getAuth(req);
       const { title, color } = req.body as { title: string; color: string };
 
-      const board = await this.boardServices.createBoard(
-        title,
-        color,
-        orgId as string
-      );
+      await this.boardServices.createBoard(title, color, orgId as string);
 
-      return res.status(201).send(board);
+      return res.status(201).send({
+        message: "Board created successfully",
+      });
     } catch (err) {
       if (err instanceof Error) {
         return res.status(400).send({

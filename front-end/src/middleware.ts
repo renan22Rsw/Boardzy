@@ -15,7 +15,7 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   if (userId && isPublicRoute(req)) {
-    return NextResponse.redirect(new URL("/organizations/boards", req.url));
+    return NextResponse.redirect(new URL("/select-org", req.url));
   }
 
   if (userId && !orgId && req.nextUrl.pathname !== "/select-org") {
