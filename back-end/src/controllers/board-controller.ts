@@ -42,6 +42,23 @@ export class BoardController {
     }
   }
 
+  async getBoardById(req: Request, res: Response): Promise<any> {
+    try {
+      const { id } = req.params as { id: string };
+
+      const board = await this.boardServices.getBoardById(id as string);
+
+      return res.status(200).send(board);
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).send({
+          error: err.message,
+        });
+      }
+      return res.status(500).send({ error: "Unexpected error" });
+    }
+  }
+
   async updateBoardTitle(req: Request, res: Response): Promise<any> {
     try {
       const { title } = req.body as { title: string };

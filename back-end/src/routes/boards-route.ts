@@ -14,6 +14,8 @@ router.post("/boards", (req, res) => boardController.createBoard(req, res));
 
 router.get("/boards", (req, res) => boardController.getBoards(req, res));
 
+router.get("/boards/:id", (req, res) => boardController.getBoardById(req, res));
+
 router.patch("/boards/:id", (req, res) =>
   boardController.updateBoardTitle(req, res)
 );

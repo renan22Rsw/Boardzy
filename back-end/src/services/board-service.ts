@@ -51,6 +51,23 @@ export class BoardService {
     }
   }
 
+  async getBoardById(id: string) {
+    try {
+      const board = await db.board.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      return board;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw Error(err.message);
+      }
+      throw new Error("Unexpected error");
+    }
+  }
+
   async updateBoardTitle(id: string, title: string) {
     try {
       await db.board.update({
