@@ -6,17 +6,23 @@ import { BoardDropdown } from "./board-dropdown";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Link from "next/link";
+import { updateBoardTitle } from "@/schemas/board-schema";
 export const BoardTitle = ({ title, id }: { title: string; id: string }) => {
   const [newTitle, setNewTitle] = useState<string>(title);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const router = useRouter();
   const { getToken } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (newTitle.length <= 2) {
-      console.log("Title must be at least 3 characters long");
+    const safeParsed = updateBoardTitle.safeParse({ title: newTitle, id });
+
+    if (!safeParsed.success) {
+      const errorMsg =
+        safeParsed.error.format().title?._errors || "Invalid input";
+      toast.error(errorMsg);
       return;
     }
 
@@ -28,7 +34,7 @@ export const BoardTitle = ({ title, id }: { title: string; id: string }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ id, title: newTitle }),
+        body: JSON.stringify(safeParsed.data),
       });
 
       const data = await response.json();
@@ -54,12 +60,15 @@ export const BoardTitle = ({ title, id }: { title: string; id: string }) => {
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder="Enter board title"
+            onBlur={() => setIsEditing(false)}
           />
         </form>
       ) : (
-        <h6 className="font-semibold text-zinc-800 dark:text-zinc-100">
-          {title}
-        </h6>
+        <Link href={`/board/${id}`}>
+          <h6 className="font-semibold text-zinc-800 hover:underline dark:text-zinc-100">
+            {title}
+          </h6>
+        </Link>
       )}
       <BoardDropdown id={id} setRename={setIsEditing} />
     </>
