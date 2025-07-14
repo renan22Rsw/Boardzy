@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 const isProtectedRoute = createRouteMatcher([
   "/organizations(.*)",
   "/select-org",
+  "/board(.*)",
 ]);
 const isPublicRoute = createRouteMatcher(["/signup", "/login"]);
 
