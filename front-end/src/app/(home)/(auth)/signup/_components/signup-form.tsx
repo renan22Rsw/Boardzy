@@ -10,7 +10,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signupSchema } from "@/schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { AuthErrorMessage } from "../../_components/auth-error-message";
 import { useState } from "react";
 import { ClerkError } from "@/types/clerk-error";
+import { signupSchema } from "@/schemas/auth-schema";
 
 export const SignUpForm = () => {
   const { isLoaded, signUp, setActive } = useSignUp();

@@ -1,6 +1,7 @@
+import { Boards } from "@/types/boards";
 import { auth } from "@clerk/nextjs/server";
 
-export const getBoards = async () => {
+export const getBoards = async (): Promise<Boards[]> => {
   try {
     const { getToken } = await auth();
 
@@ -14,9 +15,12 @@ export const getBoards = async () => {
       },
     });
 
-    const data = await response.json();
+    const data: Boards[] = await response.json();
     return data;
   } catch (err) {
-    console.log(err);
+    if (err instanceof Error) {
+      throw Error(err.message);
+    }
+    throw Error("Something went wrong");
   }
 };

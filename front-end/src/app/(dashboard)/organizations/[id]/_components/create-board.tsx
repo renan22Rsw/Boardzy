@@ -22,10 +22,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BoardColorPicker } from "./board-color-picker";
-import { boardSchema } from "@/schemas/board-schema";
+
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { boardSchema } from "@/schemas/board-schema";
 
 export const CreateBoard = ({ boardRemaning }: { boardRemaning: number }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
