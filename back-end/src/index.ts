@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 import { router } from "./routes/boards-route";
+import { listRouter } from "./routes/lists-route";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(
 app.use(clerkMiddleware());
 
 app.use("/api", router);
+app.use("/api", listRouter);
 
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`);
