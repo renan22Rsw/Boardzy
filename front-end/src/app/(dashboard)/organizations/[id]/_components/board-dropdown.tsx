@@ -17,9 +17,16 @@ import { toast } from "sonner";
 interface BoardDropdownProps {
   id: string;
   setRename: Dispatch<SetStateAction<boolean>>;
+  apiRoute: string;
+  label: string;
 }
 
-export const BoardDropdown = ({ id, setRename }: BoardDropdownProps) => {
+export const BoardDropdown = ({
+  id,
+  setRename,
+  apiRoute,
+  label,
+}: BoardDropdownProps) => {
   const { getToken } = useAuth();
   const router = useRouter();
 
@@ -27,7 +34,7 @@ export const BoardDropdown = ({ id, setRename }: BoardDropdownProps) => {
     try {
       const token = await getToken();
 
-      const response = await fetch(`/api/boards/${id}`, {
+      const response = await fetch(`${apiRoute}/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +61,7 @@ export const BoardDropdown = ({ id, setRename }: BoardDropdownProps) => {
         <Ellipsis />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Board actions</DropdownMenuLabel>
+        <DropdownMenuLabel>{label} actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => setRename(true)}>
           <Pencil />

@@ -1,24 +1,27 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { BoardDropdown } from "./board-dropdown";
+import { List } from "@/types/lists";
+import { useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import Link from "next/link";
-import { updateBoardTitle } from "@/schemas/board-schema";
+import { useRouter } from "next/navigation";
+import { updateListTitleSchema } from "@/schemas/list-schema";
+import { Input } from "@/components/ui/input";
+import { BoardDropdown } from "@/app/(dashboard)/organizations/[id]/_components/board-dropdown";
 
-export const BoardTitle = ({ title, id }: { title: string; id: string }) => {
-  const [newTitle, setNewTitle] = useState<string>(title);
+export const ListHeader = ({ title, id }: List) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { getToken } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const safeParsed = updateBoardTitle.safeParse({ title: newTitle, id });
+    const safeParsed = updateListTitleSchema.safeParse({
+      title: inputRef.current?.value,
+      id,
+    });
 
     if (!safeParsed.success) {
       const errorMsg =
@@ -29,7 +32,7 @@ export const BoardTitle = ({ title, id }: { title: string; id: string }) => {
 
     try {
       const token = await getToken();
-      const response = await fetch(`/api/boards/${id}`, {
+      const response = await fetch(`/api/lists/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -53,30 +56,25 @@ export const BoardTitle = ({ title, id }: { title: string; id: string }) => {
   };
 
   return (
-    <>
+    <div className="flex items-center justify-between gap-x-2 p-2 text-sm font-semibold">
       {isEditing ? (
         <form onSubmit={handleSubmit}>
           <Input
-            className="my-1 h-[25px] w-[110px] px-2 font-semibold text-zinc-800 placeholder:italic md:w-[180px] dark:text-zinc-100"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-            placeholder="Enter board title"
+            className="w-full p-2"
+            ref={inputRef}
+            placeholder="Enter list title"
             onBlur={() => setIsEditing(false)}
           />
         </form>
       ) : (
-        <Link href={`/board/${id}`}>
-          <h6 className="font-semibold text-zinc-800 hover:underline dark:text-zinc-100">
-            {title}
-          </h6>
-        </Link>
+        <h4 className="h-full w-full px-2 py-2 text-sm font-medium">{title}</h4>
       )}
       <BoardDropdown
         id={id}
         setRename={setIsEditing}
-        apiRoute="/api/boards"
-        label="Board"
+        apiRoute="/api/lists"
+        label="List"
       />
-    </>
+    </div>
   );
 };
