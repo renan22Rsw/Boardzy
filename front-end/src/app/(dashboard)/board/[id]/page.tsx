@@ -2,8 +2,8 @@ import { getBoardById } from "@/lib/api/get-boards-by-id";
 import { notFound } from "next/navigation";
 import { ListNavbar } from "./_components/list-navbar";
 import { ListSection } from "./_components/list-section";
-import { ListContainer } from "./_components/list-container";
 import { getBoardList } from "@/lib/api/get-board-lists";
+import { BoardIdPageContainer } from "./_components/container";
 
 const BoardIdPage = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;
@@ -15,7 +15,7 @@ const BoardIdPage = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <ListContainer>
+    <BoardIdPageContainer>
       <ListNavbar
         id={board.id}
         orgId={board.orgId}
@@ -23,7 +23,7 @@ const BoardIdPage = async ({ params }: { params: { id: string } }) => {
         backgroundColor={board.color}
       />
       <ListSection data={list} />
-    </ListContainer>
+    </BoardIdPageContainer>
   );
 };
 

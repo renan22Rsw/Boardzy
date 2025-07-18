@@ -4,4 +4,5 @@ export interface List {
   id: string;
   title: string;
   card?: Card[];
+  order?: number;
 }
