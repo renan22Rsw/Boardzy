@@ -1,53 +1,53 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+    // This is your Prisma schema file,
+    // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+    // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+    // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
-}
+    generator client {
+      provider = "prisma-client-js"
+      output   = "../src/generated/prisma"
+    }
 
-datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
-}
+    datasource db {
+      provider = "sqlite"
+      url      = "file:./dev.db"
+    }
 
-model Board {
-  id        String   @id @default(cuid())
-  orgId     String
-  title     String
-  color     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  list      List[]
+    model Board {
+      id        String   @id @default(cuid())
+      orgId     String
+      title     String
+      color     String
+      createdAt DateTime @default(now())
+      updatedAt DateTime @updatedAt
+      list      List[]
 
-  @@index([orgId])
-}
+      @@index([orgId])
+    }
 
-model List {
-  id      String @id @default(cuid())
-  title   String
-  order   Int
-  boardId String
-  board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  card    Card[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    model List {
+      id      String @id @default(cuid())
+      title   String
+      order   Int
+      boardId String
+      board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+      card    Card[]
+      createdAt DateTime @default(now())
+      updatedAt DateTime @updatedAt
 
-  @@index([boardId])
-}
+      @@index([boardId])
+    }
 
-model Card {
-  id          String  @id @default(cuid())
-  title       String
-  order       Int
-  description String?
-  listId      String
-  list        List    @relation(fields: [listId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    model Card {
+      id          String  @id @default(cuid())
+      title       String
+      order       Int
+      description String?
+      listId      String
+      list        List    @relation(fields: [listId], references: [id], onDelete: Cascade)
+      createdAt DateTime @default(now())
+      updatedAt DateTime @updatedAt
 
-  @@index([listId])
-}
+      @@index([listId])
+    }
