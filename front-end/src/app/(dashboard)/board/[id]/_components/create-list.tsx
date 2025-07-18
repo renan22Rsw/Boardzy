@@ -63,27 +63,29 @@ export const CreateList = () => {
   return (
     <div>
       {!addList ? (
-        <Button
-          className="flex w-[200px] cursor-pointer justify-start py-4 text-start font-semibold"
-          variant={"outline"}
-          onClick={handleClick}
-        >
-          <Plus />
-          Add a list...
-        </Button>
+        <div className="p-2">
+          <Button
+            className="flex cursor-pointer justify-start bg-zinc-100 text-start font-semibold xl:w-[200px] dark:bg-zinc-900"
+            variant={"outline"}
+            onClick={handleClick}
+          >
+            <Plus />
+            Add a list...
+          </Button>
+        </div>
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 rounded-md bg-zinc-900 p-4 xl:w-[250px]"
+          className="mx-2 space-y-4 rounded-md bg-zinc-100 p-4 dark:bg-zinc-900"
         >
           <Input
             placeholder="Enter list title...."
-            className="xl:w-[200px]"
+            className="text-sm 2xl:w-[200px]"
             id="list-title"
             ref={inputRef}
           />
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             <Button
               type="submit"
               variant={"outline"}
@@ -92,7 +94,14 @@ export const CreateList = () => {
               Add List
             </Button>
 
-            <X className="cursor-pointer" onClick={() => setAddList(false)} />
+            <Button
+              type="button"
+              variant={"ghost"}
+              className="cursor-pointer"
+              onClick={() => setAddList(false)}
+            >
+              <X />
+            </Button>
           </div>
         </form>
       )}
