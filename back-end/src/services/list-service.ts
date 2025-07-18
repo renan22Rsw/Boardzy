@@ -100,4 +100,32 @@ export class ListService {
       throw new Error("Unexpected error");
     }
   }
+
+  async updateListOrder(items: { id: string; order: number }[], orgId: string) {
+    try {
+      let lists;
+      const transaction = items.map((list) =>
+        db.list.update({
+          where: {
+            id: list.id,
+            board: {
+              orgId,
+            },
+          },
+          data: {
+            order: list.order,
+          },
+        })
+      );
+
+      lists = await db.$transaction(transaction);
+
+      return lists;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw Error(err.message);
+      }
+      throw new Error("Unexpected error");
+    }
+  }
 }

@@ -11,3 +11,7 @@ const cardController = new CardController(cardService);
 cardRouter.use(requireAuth());
 
 cardRouter.post("/cards", (req, res) => cardController.createCard(req, res));
+
+cardRouter.patch("/cards", (req, res) =>
+  cardController.updateCardOrder(req, res)
+);

@@ -20,6 +20,10 @@ listRouter.patch("/lists/:id", (req, res) =>
   listController.updateListTitle(req, res)
 );
 
+listRouter.patch("/lists", (req, res) =>
+  listController.updateListOrder(req, res)
+);
+
 listRouter.delete("/lists/:id", (req, res) =>
   listController.deleteList(req, res)
 );

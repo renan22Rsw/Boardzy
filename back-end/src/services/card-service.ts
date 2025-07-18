@@ -54,4 +54,36 @@ export class CardService {
       throw new Error("Unexpected error");
     }
   }
+
+  async updateCardOrder(
+    items: { id: string; order: number; listId?: string }[],
+    orgId: string
+  ) {
+    try {
+      let cards;
+
+      const transaction = items.map((card) =>
+        db.card.update({
+          where: {
+            id: card.id,
+            list: {
+              board: {
+                orgId,
+              },
+            },
+          },
+          data: {
+            order: card.order,
+            listId: card.listId,
+          },
+        })
+      );
+      cards = await db.$transaction(transaction);
+    } catch (err) {
+      if (err instanceof Error) {
+        throw Error(err.message);
+      }
+      throw new Error("Unexpected error");
+    }
+  }
 }
