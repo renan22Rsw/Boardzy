@@ -4,6 +4,7 @@ import "./globals.css";
 import { Footer } from "@/components/footer/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { ModelProvider } from "./(dashboard)/board/[id]/provider/model-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
         >
           <main className="min-h-screen">{children}</main>
           <Toaster />
+          <ModelProvider />
           <Footer />
         </body>
       </html>
