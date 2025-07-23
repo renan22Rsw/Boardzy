@@ -12,6 +12,18 @@ cardRouter.use(requireAuth());
 
 cardRouter.post("/cards", (req, res) => cardController.createCard(req, res));
 
+cardRouter.get("/cards/:id", (req, res) =>
+  cardController.getCardById(req, res)
+);
+
 cardRouter.patch("/cards", (req, res) =>
   cardController.updateCardOrder(req, res)
+);
+
+cardRouter.patch("/cards/:id", (req, res) =>
+  cardController.updateCardTitle(req, res)
+);
+
+cardRouter.delete("/cards/:id", (req, res) =>
+  cardController.deleteCard(req, res)
 );

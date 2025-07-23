@@ -23,6 +23,22 @@ export class CardController {
     }
   }
 
+  async getCardById(req: Request, res: Response): Promise<any> {
+    const { id } = req.params as { id: string };
+    const { orgId } = getAuth(req);
+    try {
+      const card = await this.cardService.getCardById(id, orgId as string);
+      return res.status(200).send(card);
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).send({
+          error: err.message,
+        });
+      }
+      return res.status(500).send({ error: "Unexpected error" });
+    }
+  }
+
   async updateCardOrder(req: Request, res: Response): Promise<any> {
     const { items } = req.body as {
       items: { id: string; order: number; listId: string }[];
@@ -38,6 +54,43 @@ export class CardController {
 
       return res.status(200).send({
         message: "Your card has been reordered",
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).send({
+          error: err.message,
+        });
+      }
+      return res.status(500).send({ error: "Unexpected error" });
+    }
+  }
+
+  async updateCardTitle(req: Request, res: Response): Promise<any> {
+    const { id } = req.params as { id: string };
+    const { title } = req.body as { title: string };
+    const { orgId } = getAuth(req);
+    try {
+      await this.cardService.updateCardTitle(id, title, orgId as string);
+      return res.status(200).send({
+        message: "Your card title has been updated",
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).send({
+          error: err.message,
+        });
+      }
+      return res.status(500).send({ error: "Unexpected error" });
+    }
+  }
+
+  async deleteCard(req: Request, res: Response): Promise<any> {
+    const { id } = req.params as { id: string };
+    const { orgId } = getAuth(req);
+    try {
+      await this.cardService.deleteCard(id, orgId as string);
+      return res.status(200).send({
+        message: "Card has been deleted",
       });
     } catch (err) {
       if (err instanceof Error) {

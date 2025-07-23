@@ -55,6 +55,32 @@ export class CardService {
     }
   }
 
+  async getCardById(listId: string, orgId: string) {
+    try {
+      if (!orgId) {
+        throw new Error("Organization Id is required");
+      }
+
+      const card = await db.card.findUnique({
+        where: {
+          id: listId,
+          list: {
+            board: {
+              orgId,
+            },
+          },
+        },
+      });
+
+      return card;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw Error(err.message);
+      }
+      throw new Error("Unexpected error");
+    }
+  }
+
   async updateCardOrder(
     items: { id: string; order: number; listId?: string }[],
     orgId: string
@@ -79,6 +105,59 @@ export class CardService {
         })
       );
       cards = await db.$transaction(transaction);
+    } catch (err) {
+      if (err instanceof Error) {
+        throw Error(err.message);
+      }
+      throw new Error("Unexpected error");
+    }
+  }
+
+  async updateCardTitle(id: string, title: string, orgId: string) {
+    try {
+      if (!orgId) {
+        throw new Error("Organization Id is required");
+      }
+
+      const card = await db.card.update({
+        where: {
+          id,
+          list: {
+            board: {
+              orgId,
+            },
+          },
+        },
+        data: {
+          title,
+        },
+      });
+
+      return card;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw Error(err.message);
+      }
+      throw new Error("Unexpected error");
+    }
+  }
+
+  async deleteCard(id: string, orgId: string) {
+    try {
+      if (!orgId) {
+        throw new Error("Organization Id is required");
+      }
+
+      await db.card.delete({
+        where: {
+          id,
+          list: {
+            board: {
+              orgId,
+            },
+          },
+        },
+      });
     } catch (err) {
       if (err instanceof Error) {
         throw Error(err.message);
