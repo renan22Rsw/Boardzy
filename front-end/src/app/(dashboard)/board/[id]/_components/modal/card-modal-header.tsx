@@ -113,7 +113,7 @@ export const CardModalHeader = ({
           </form>
         ) : (
           <h4
-            className="text-lg font-bold text-zinc-700"
+            className="text-lg font-bold text-zinc-700 dark:text-zinc-200"
             onClick={() => setIsRename(true)}
           >
             {card?.title}

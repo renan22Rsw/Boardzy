@@ -42,7 +42,9 @@ export const CardModalActions = ({
 
   return (
     <div className="space-y-2 pt-2">
-      <h6 className="text-sm font-bold text-zinc-800">Actions</h6>
+      <h6 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">
+        Actions
+      </h6>
       <Button
         variant={"outline"}
         className="h-[30px] w-[100px] cursor-pointer font-semibold text-zinc-700"

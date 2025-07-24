@@ -8,6 +8,15 @@ export const createCardSchema = z.object({
   listId: z.string(),
 });
 
+export const createCardDescriptionSchema = z.object({
+  description: z
+    .string()
+    .min(10, {
+      message: "Description must be at least 10 characters long",
+    })
+    .optional(),
+});
+
 export const updateCardTitleSchema = z.object({
   title: z
     .string({

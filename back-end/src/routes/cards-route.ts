@@ -12,6 +12,10 @@ cardRouter.use(requireAuth());
 
 cardRouter.post("/cards", (req, res) => cardController.createCard(req, res));
 
+cardRouter.post("/cards/:id/description", (req, res) =>
+  cardController.createCardDescription(req, res)
+);
+
 cardRouter.get("/cards/:id", (req, res) =>
   cardController.getCardById(req, res)
 );

@@ -55,6 +55,35 @@ export class CardService {
     }
   }
 
+  async createCardDescription(id: string, description: string, orgId: string) {
+    try {
+      if (!orgId) {
+        throw new Error("Organization Id is required");
+      }
+
+      const card = await db.card.update({
+        where: {
+          id,
+          list: {
+            board: {
+              orgId,
+            },
+          },
+        },
+        data: {
+          description,
+        },
+      });
+
+      return card;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw Error(err.message);
+      }
+      throw new Error("Unexpected error");
+    }
+  }
+
   async getCardById(listId: string, orgId: string) {
     try {
       if (!orgId) {

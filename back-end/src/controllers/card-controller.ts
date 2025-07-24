@@ -23,6 +23,29 @@ export class CardController {
     }
   }
 
+  async createCardDescription(req: Request, res: Response): Promise<any> {
+    const { id } = req.params as { id: string };
+    const { description } = req.body as { description: string };
+    const { orgId } = getAuth(req);
+    try {
+      await this.cardService.createCardDescription(
+        id,
+        description,
+        orgId as string
+      );
+      return res.status(201).send({
+        message: "Card description has been created",
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).send({
+          error: err.message,
+        });
+      }
+      return res.status(500).send({ error: "Unexpected error" });
+    }
+  }
+
   async getCardById(req: Request, res: Response): Promise<any> {
     const { id } = req.params as { id: string };
     const { orgId } = getAuth(req);
