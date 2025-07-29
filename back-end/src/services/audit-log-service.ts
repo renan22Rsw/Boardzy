@@ -45,6 +45,29 @@ export class AuditLogService {
     }
   }
 
+  async getAllAuditLogs(orgId: string) {
+    try {
+      if (!orgId) {
+        throw new Error("Organization Id is required");
+      }
+
+      const auditLogs = await db.auditLog.findMany({
+        where: {
+          orgId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      return auditLogs;
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log(err.message);
+      }
+      console.log(err);
+    }
+  }
+
   async getCardAuditLogs(props: Props, orgId: string) {
     try {
       if (!orgId) {
