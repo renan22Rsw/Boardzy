@@ -1,19 +1,47 @@
-import { getAuth } from "@clerk/express";
+import { clerkClient, getAuth } from "@clerk/express";
 import { ListService } from "../services/list-service";
 import { Request, Response } from "express";
+import { AuditLogService } from "../services/audit-log-service";
+import { ACTION, ENTITY_TYPE } from "../generated/prisma";
 
 export class ListController {
-  constructor(private listService: ListService) {}
+  constructor(
+    private listService: ListService,
+    private auditLogService: AuditLogService
+  ) {}
 
   async createList(req: Request, res: Response): Promise<any> {
-    const { title, boardId } = req.body as { title: string; boardId: string };
-    const { orgId } = getAuth(req);
+    const { title, boardId } = req.body as {
+      title: string;
+      boardId: string;
+    };
+    const { orgId, userId } = getAuth(req);
+
+    const { firstName, lastName, imageUrl } = await clerkClient.users.getUser(
+      userId as string
+    );
 
     try {
       await this.listService.createList(title, boardId, orgId as string);
 
+      await this.auditLogService.createAuditLog(
+        {
+          entityId: boardId,
+          entityTitle: title,
+          entityType: ENTITY_TYPE.LIST,
+          action: ACTION.CREATE,
+          user: {
+            id: userId as string,
+            firstName: firstName as string,
+            lastName: lastName as string,
+            image: imageUrl as string,
+          },
+        },
+        orgId as string
+      );
+
       return res.status(201).send({
-        message: "A list has been created",
+        message: `The list ${title} has been created`,
       });
     } catch (err) {
       if (err instanceof Error) {
@@ -46,12 +74,33 @@ export class ListController {
   async updateListTitle(req: Request, res: Response): Promise<any> {
     const { id } = req.params as { id: string };
     const { title } = req.body as { title: string };
+    const { orgId, userId } = getAuth(req);
+
+    const { firstName, lastName, imageUrl } = await clerkClient.users.getUser(
+      userId as string
+    );
 
     try {
       await this.listService.updateListTitle(id, title);
 
+      await this.auditLogService.createAuditLog(
+        {
+          entityId: id,
+          entityTitle: title,
+          entityType: ENTITY_TYPE.LIST,
+          action: ACTION.UPDATE,
+          user: {
+            id: userId as string,
+            firstName: firstName as string,
+            lastName: lastName as string,
+            image: imageUrl as string,
+          },
+        },
+        orgId as string
+      );
+
       return res.send({
-        message: "Your list title has been updated",
+        message: `The title of your list ${title} has been updated`,
       });
     } catch (err) {
       if (err instanceof Error) {
@@ -89,12 +138,34 @@ export class ListController {
 
   async deleteList(req: Request, res: Response): Promise<any> {
     const { id } = req.params as { id: string };
+    const { title } = req.body as { title: string };
+    const { orgId, userId } = getAuth(req);
+
+    const { firstName, lastName, imageUrl } = await clerkClient.users.getUser(
+      userId as string
+    );
 
     try {
       await this.listService.deleteList(id);
 
+      await this.auditLogService.createAuditLog(
+        {
+          entityId: id,
+          entityTitle: title,
+          entityType: ENTITY_TYPE.LIST,
+          action: ACTION.DELETE,
+          user: {
+            id: userId as string,
+            firstName: firstName as string,
+            lastName: lastName as string,
+            image: imageUrl as string,
+          },
+        },
+        orgId as string
+      );
+
       return res.status(200).send({
-        message: "List deleted successfully",
+        message: `The list ${title} has been deleted`,
       });
     } catch (err) {
       if (err instanceof Error) {

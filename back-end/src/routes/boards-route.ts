@@ -2,11 +2,13 @@ import express from "express";
 import { requireAuth } from "@clerk/express";
 import { BoardService } from "../services/board-service";
 import { BoardController } from "../controllers/board-controller";
+import { AuditLogService } from "../services/audit-log-service";
 
 export const router = express.Router();
 
 const boardService = new BoardService();
-const boardController = new BoardController(boardService);
+const auditLogService = new AuditLogService();
+const boardController = new BoardController(boardService, auditLogService);
 
 router.use(requireAuth());
 

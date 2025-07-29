@@ -1,4 +1,5 @@
 import db from "../db";
+import { Props } from "./audit-log-service";
 
 /**
  * Service for manipulating cards

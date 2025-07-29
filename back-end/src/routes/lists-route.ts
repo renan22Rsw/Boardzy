@@ -2,11 +2,13 @@ import { getAuth, requireAuth } from "@clerk/express";
 import express from "express";
 import { ListService } from "../services/list-service";
 import { ListController } from "../controllers/list-controller";
+import { AuditLogService } from "../services/audit-log-service";
 
 export const listRouter = express.Router();
 
 const listService = new ListService();
-const listController = new ListController(listService);
+const auditLogService = new AuditLogService();
+const listController = new ListController(listService, auditLogService);
 
 listRouter.use(requireAuth());
 

@@ -1,19 +1,52 @@
-import { getAuth } from "@clerk/express";
+import { clerkClient, getAuth } from "@clerk/express";
 import { BoardService } from "../services/board-service";
 import { Request, Response } from "express";
+import { AuditLogService } from "../services/audit-log-service";
+import { ACTION, ENTITY_TYPE } from "../generated/prisma";
 
 export class BoardController {
-  constructor(private boardServices: BoardService) {}
+  constructor(
+    private boardServices: BoardService,
+    private auditLogService: AuditLogService
+  ) {}
 
   async createBoard(req: Request, res: Response): Promise<any> {
     try {
-      const { orgId } = getAuth(req);
-      const { title, color } = req.body as { title: string; color: string };
+      const { orgId, userId } = getAuth(req);
 
-      await this.boardServices.createBoard(title, color, orgId as string);
+      const { title, color } = req.body as {
+        title: string;
+        color: string;
+      };
+
+      const { firstName, lastName, imageUrl } = await clerkClient.users.getUser(
+        userId as string
+      );
+
+      const board = await this.boardServices.createBoard(
+        title,
+        color,
+        orgId as string
+      );
+
+      await this.auditLogService.createAuditLog(
+        {
+          entityId: board.id,
+          entityTitle: title,
+          entityType: ENTITY_TYPE.BOARD,
+          action: ACTION.CREATE,
+          user: {
+            id: userId as string,
+            firstName: firstName as string,
+            lastName: lastName as string,
+            image: imageUrl as string,
+          },
+        },
+        orgId as string
+      );
 
       return res.status(201).send({
-        message: "Board created successfully",
+        message: `The board ${title} has been created`,
       });
     } catch (err) {
       if (err instanceof Error) {
@@ -63,10 +96,31 @@ export class BoardController {
     try {
       const { title } = req.body as { title: string };
       const { id } = req.params as { id: string };
+      const { orgId, userId } = getAuth(req);
+
+      const { firstName, lastName, imageUrl } = await clerkClient.users.getUser(
+        userId as string
+      );
       await this.boardServices.updateBoardTitle(id, title);
 
+      await this.auditLogService.createAuditLog(
+        {
+          entityId: id,
+          entityTitle: title,
+          entityType: ENTITY_TYPE.BOARD,
+          action: ACTION.UPDATE,
+          user: {
+            id: userId as string,
+            firstName: firstName as string,
+            lastName: lastName as string,
+            image: imageUrl as string,
+          },
+        },
+        orgId as string
+      );
+
       return res.send({
-        message: "Your board title has been updated",
+        message: `The title of your board ${title} has been updated`,
       });
     } catch (err) {
       if (err instanceof Error) {
@@ -80,12 +134,34 @@ export class BoardController {
 
   async deleteBoard(req: Request, res: Response) {
     try {
-      const { id } = req.params as { id: string };
+      const { id } = req.params as { id: string; title: string };
+      const { title } = req.body as { title: string };
+      const { orgId, userId } = getAuth(req);
+
+      const { firstName, lastName, imageUrl } = await clerkClient.users.getUser(
+        userId as string
+      );
 
       await this.boardServices.deleteBoard(id);
 
+      await this.auditLogService.createAuditLog(
+        {
+          entityId: id,
+          entityTitle: title,
+          entityType: ENTITY_TYPE.BOARD,
+          action: ACTION.DELETE,
+          user: {
+            id: userId as string,
+            firstName: firstName as string,
+            lastName: lastName as string,
+            image: imageUrl as string,
+          },
+        },
+        orgId as string
+      );
+
       return res.send({
-        message: "Board deleted successfully",
+        message: `The board ${title} has been deleted`,
       });
     } catch (err) {
       if (err instanceof Error) {

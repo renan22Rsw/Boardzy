@@ -2,11 +2,13 @@ import express from "express";
 import { CardService } from "../services/card-service";
 import { CardController } from "../controllers/card-controller";
 import { requireAuth } from "@clerk/express";
+import { AuditLogService } from "../services/audit-log-service";
 
 export const cardRouter = express.Router();
 
 const cardService = new CardService();
-const cardController = new CardController(cardService);
+const auditLogService = new AuditLogService();
+const cardController = new CardController(cardService, auditLogService);
 
 cardRouter.use(requireAuth());
 
@@ -18,6 +20,10 @@ cardRouter.post("/cards/:id/description", (req, res) =>
 
 cardRouter.get("/cards/:id", (req, res) =>
   cardController.getCardById(req, res)
+);
+
+cardRouter.get("/cards/:id/logs", (req, res) =>
+  cardController.getCardsAuditLogs(req, res)
 );
 
 cardRouter.patch("/cards", (req, res) =>
