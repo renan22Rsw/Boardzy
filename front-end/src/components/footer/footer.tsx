@@ -2,7 +2,7 @@ import Image from "next/image";
 import BoardzyLogo from "@/assets/boardzy-logo.png";
 import { social } from "./social";
 import Link from "next/link";
-import { FooterTheme } from "./theme";
+import { ThemeButton } from "../theme-provider/theme-button";
 
 export const Footer = () => {
   return (
@@ -24,11 +24,11 @@ export const Footer = () => {
         ))}
 
         <div className="flex w-full justify-end md:hidden">
-          <FooterTheme />
+          <ThemeButton />
         </div>
       </ul>
       <div className="hidden md:block">
-        <FooterTheme />
+        <ThemeButton />
       </div>
     </footer>
   );

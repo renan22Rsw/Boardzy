@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/footer/footer";
-import { ClerkProvider } from "@clerk/nextjs";
+
 import { Toaster } from "@/components/ui/sonner";
 import { ModelProvider } from "./(dashboard)/board/[id]/provider/model-provider";
+import { ThemeProvider } from "@/components/theme-provider/theme-provider";
+import { ClerkThemeProvider } from "@/components/theme-provider/clerk-theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,21 +29,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      appearance={{
-        cssLayerName: "clerk",
-      }}
-    >
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ThemeProvider
+          attribute={"class"}
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <main className="min-h-screen">{children}</main>
-          <Toaster />
-          <ModelProvider />
-          <Footer />
-        </body>
-      </html>
-    </ClerkProvider>
+          <ClerkThemeProvider>
+            <main className="min-h-screen">{children}</main>
+            <Toaster />
+            <ModelProvider />
+            <Footer />
+          </ClerkThemeProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

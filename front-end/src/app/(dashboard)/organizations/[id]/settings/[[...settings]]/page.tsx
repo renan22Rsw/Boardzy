@@ -1,15 +1,22 @@
-import { OrganizationProfile } from "@clerk/nextjs";
+"use client";
 
+import { OrganizationProfile } from "@clerk/nextjs";
+import { useTheme } from "next-themes";
 const SettingsPage = () => {
+  const { theme } = useTheme();
+
   return (
     <OrganizationProfile
       appearance={{
+        variables: {
+          colorBackground: theme === "dark" ? "#09090B" : "#fff",
+        },
         elements: {
           rootBox: {
             boxShadow: "none",
             padding: "20px",
-            background: "#f4f4f5",
             width: "100%",
+            maxWidth: "1200px",
             height: "100vh",
           },
 
@@ -23,6 +30,7 @@ const SettingsPage = () => {
           scrollBox: {
             width: "100%",
             borderRadius: "none",
+            border: "none",
           },
         },
       }}
