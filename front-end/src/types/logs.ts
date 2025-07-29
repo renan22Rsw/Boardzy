@@ -1,18 +1,24 @@
 export interface Logs {
   id: string;
+  orgId: string;
+  action: ACTION;
+  entityId: string;
+  entityType: ENTITY_TYPE;
   entityTitle: string;
-  entityType: EntityType;
+  userId: string;
   userImage: string;
-  action: Action;
+  userName: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export enum Action {
+export enum ACTION {
   CREATE = "CREATE",
   UPDATE = "UPDATE",
   DELETE = "DELETE",
 }
 
-export enum EntityType {
+export enum ENTITY_TYPE {
   CARD = "CARD",
   LIST = "LIST",
   BOARD = "BOARD",
