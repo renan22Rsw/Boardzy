@@ -15,6 +15,8 @@ export const createCardDescriptionSchema = z.object({
       message: "Description must be at least 10 characters long",
     })
     .optional(),
+
+  title: z.string().optional(),
 });
 
 export const updateCardTitleSchema = z.object({

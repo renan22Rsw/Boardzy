@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import useCardData from "@/hooks/use-cards-data";
 import { useAuth } from "@clerk/nextjs";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ export const CardModalActions = ({
 }: CardModalActionsProps) => {
   const { getToken } = useAuth();
   const router = useRouter();
+  const { cards } = useCardData(listId);
 
   const handleDelete = async () => {
     onClose();
@@ -28,6 +30,8 @@ export const CardModalActions = ({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+
+        body: JSON.stringify({ id: cards?.id, title: cards?.title }),
       });
       const data = await response.json();
       toast.success(data.message);

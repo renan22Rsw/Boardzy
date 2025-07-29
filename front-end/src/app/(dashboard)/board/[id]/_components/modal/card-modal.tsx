@@ -28,7 +28,7 @@ export const CardModal = () => {
           <CardModalDescription listId={id as string} />
           <CardModalActions listId={id as string} onClose={onClose} />
         </div>
-        <CardModalActivity />
+        <CardModalActivity listId={id as string} />
       </DialogContent>
     </Dialog>
   );

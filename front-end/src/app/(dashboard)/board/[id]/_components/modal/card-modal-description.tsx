@@ -7,15 +7,18 @@ import { useRef, useState } from "react";
 import { createCardDescriptionSchema } from "@/schemas/card-schema";
 import { toast } from "sonner";
 import { useAuth } from "@clerk/nextjs";
+import useCardData from "@/hooks/use-cards-data";
 
 export const CardModalDescription = ({ listId }: { listId: string }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const { cards } = useCardData(listId);
   const { getToken } = useAuth();
 
   const handleDescription = async () => {
     const safeParsed = createCardDescriptionSchema.safeParse({
       description: textAreaRef.current?.value,
+      title: cards?.title || "",
     });
 
     if (!safeParsed.success) {
