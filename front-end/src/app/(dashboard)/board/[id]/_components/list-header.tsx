@@ -71,6 +71,7 @@ export const ListHeader = ({ title, id }: List) => {
       )}
       <BoardDropdown
         id={id}
+        title={title}
         setRename={setIsEditing}
         apiRoute="/api/lists"
         label="List"

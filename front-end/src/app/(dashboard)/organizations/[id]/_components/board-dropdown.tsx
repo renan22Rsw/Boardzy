@@ -16,6 +16,7 @@ import { toast } from "sonner";
 
 interface BoardDropdownProps {
   id: string;
+  title?: string;
   setRename: Dispatch<SetStateAction<boolean>>;
   apiRoute: string;
   label: string;
@@ -23,6 +24,7 @@ interface BoardDropdownProps {
 
 export const BoardDropdown = ({
   id,
+  title,
   setRename,
   apiRoute,
   label,
@@ -40,6 +42,8 @@ export const BoardDropdown = ({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+
+        body: JSON.stringify({ id, title }),
       });
 
       const data = await response.json();

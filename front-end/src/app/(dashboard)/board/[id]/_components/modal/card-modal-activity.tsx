@@ -7,12 +7,12 @@ import { useAuth } from "@clerk/nextjs";
 import { Activity } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { CardActivityMessage } from "./card-acitivity-message";
-import { AuditLog } from "../../../../../../../../back-end/src/generated/prisma";
+import { Logs } from "@/types/logs";
 
 export const CardModalActivity = ({ listId }: { listId: string }) => {
   const { getToken } = useAuth();
   const { cards } = useCardData(listId);
-  const [logs, setLogs] = useState<AuditLog[]>([]);
+  const [logs, setLogs] = useState<Logs[]>([]);
 
   const fetchCardsLogs = useCallback(async () => {
     const { id } = cards as Card;
@@ -27,7 +27,7 @@ export const CardModalActivity = ({ listId }: { listId: string }) => {
         },
       });
 
-      const data: AuditLog[] = await response.json();
+      const data: Logs[] = await response.json();
       setLogs(data);
     } catch (err) {
       if (err instanceof Error) {

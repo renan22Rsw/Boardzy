@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useAuth } from "@clerk/nextjs";
@@ -20,6 +20,7 @@ interface ListNavbarTitleProps {
 export const ListNavbarTitle = ({ id, title, orgId }: ListNavbarTitleProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>(title);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { getToken } = useAuth();
   const router = useRouter();
 
@@ -60,6 +61,12 @@ export const ListNavbarTitle = ({ id, title, orgId }: ListNavbarTitleProps) => {
     }
   };
 
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus();
+    }
+  }, [isEditing]);
+
   return (
     <header className="flex w-full items-center justify-between space-x-2">
       {isEditing ? (
@@ -70,6 +77,7 @@ export const ListNavbarTitle = ({ id, title, orgId }: ListNavbarTitleProps) => {
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder="Enter board title"
             onBlur={() => setIsEditing(false)}
+            ref={inputRef}
           />
         </form>
       ) : (

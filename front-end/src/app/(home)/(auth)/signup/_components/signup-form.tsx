@@ -139,7 +139,11 @@ export const SignUpForm = () => {
 
         {errMsg.length > 0 && <AuthErrorMessage msg={errMsg} />}
 
-        <Button type="submit" className="w-[150px] cursor-pointer font-bold">
+        <Button
+          type="submit"
+          disabled={form.formState.isSubmitting}
+          className="w-[150px] cursor-pointer font-bold"
+        >
           Sign Up
         </Button>
       </form>

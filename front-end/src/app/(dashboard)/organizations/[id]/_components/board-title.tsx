@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BoardDropdown } from "./board-dropdown";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ import { updateBoardTitle } from "@/schemas/board-schema";
 export const BoardTitle = ({ title, id }: { title: string; id: string }) => {
   const [newTitle, setNewTitle] = useState<string>(title);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { getToken } = useAuth();
   const router = useRouter();
 
@@ -52,15 +53,24 @@ export const BoardTitle = ({ title, id }: { title: string; id: string }) => {
     }
   };
 
+  useEffect(() => {
+    if (isEditing) {
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
+    }
+  }, [isEditing]);
+
   return (
     <>
       {isEditing ? (
         <form onSubmit={handleSubmit}>
           <Input
-            className="my-1 h-[25px] w-[110px] px-2 font-semibold text-zinc-800 placeholder:italic md:w-[180px] dark:text-zinc-100"
+            className="my-1 h-[25px] w-[110px] px-2 font-semibold text-zinc-800 ring-transparent placeholder:italic focus-visible:ring-0 md:w-[180px] dark:text-zinc-100"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder="Enter board title"
+            ref={inputRef}
             onBlur={() => setIsEditing(false)}
           />
         </form>
@@ -73,6 +83,7 @@ export const BoardTitle = ({ title, id }: { title: string; id: string }) => {
       )}
       <BoardDropdown
         id={id}
+        title={title}
         setRename={setIsEditing}
         apiRoute="/api/boards"
         label="Board"

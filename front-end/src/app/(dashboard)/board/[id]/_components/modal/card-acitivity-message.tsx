@@ -1,11 +1,11 @@
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { AuditLog } from "../../../../../../../../back-end/src/generated/prisma";
 import { generateMessageLog } from "./generate-message-log";
 import { Avatar } from "@/components/ui/avatar";
 import { format } from "date-fns";
+import { Logs } from "@/types/logs";
 
 interface CardActivityMessageProps {
-  data: AuditLog;
+  data: Logs;
 }
 
 export const CardActivityMessage = ({ data }: CardActivityMessageProps) => {

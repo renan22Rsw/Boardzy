@@ -9,13 +9,23 @@ import { toast } from "sonner";
 import { useAuth } from "@clerk/nextjs";
 import useCardData from "@/hooks/use-cards-data";
 
-export const CardModalDescription = ({ listId }: { listId: string }) => {
+interface CardModalDescriptionProps {
+  listId: string;
+  onClose: () => void;
+}
+
+export const CardModalDescription = ({
+  listId,
+  onClose,
+}: CardModalDescriptionProps) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const { cards } = useCardData(listId);
   const { getToken } = useAuth();
 
   const handleDescription = async () => {
+    onClose();
+
     const safeParsed = createCardDescriptionSchema.safeParse({
       description: textAreaRef.current?.value,
       title: cards?.title || "",
@@ -68,7 +78,7 @@ export const CardModalDescription = ({ listId }: { listId: string }) => {
           onClick={() => setIsEditing(true)}
         />
         {isEditing && (
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 py-2">
             <Button
               className="w-[100px] cursor-pointer"
               variant="outline"

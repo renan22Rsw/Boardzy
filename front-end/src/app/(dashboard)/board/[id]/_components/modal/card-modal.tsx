@@ -25,7 +25,7 @@ export const CardModal = () => {
           />
         </DialogHeader>
         <div className="flex justify-between space-x-4">
-          <CardModalDescription listId={id as string} />
+          <CardModalDescription listId={id as string} onClose={onClose} />
           <CardModalActions listId={id as string} onClose={onClose} />
         </div>
         <CardModalActivity listId={id as string} />
