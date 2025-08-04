@@ -30,7 +30,7 @@ import { boardSchema } from "@/schemas/board-schema";
 
 export const CreateBoard = ({ boardRemaning }: { boardRemaning: number }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const { getToken, orgId } = useAuth();
+  const { getToken } = useAuth();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof boardSchema>>({
@@ -53,7 +53,7 @@ export const CreateBoard = ({ boardRemaning }: { boardRemaning: number }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, color, orgId }),
+        body: JSON.stringify({ title, color }),
       });
 
       const data = await response.json();

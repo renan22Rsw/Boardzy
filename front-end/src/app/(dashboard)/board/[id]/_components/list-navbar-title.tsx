@@ -82,7 +82,9 @@ export const ListNavbarTitle = ({ id, title, orgId }: ListNavbarTitleProps) => {
         </form>
       ) : (
         <Link href={`/organizations/${orgId}`}>
-          <h3 className="text-xl font-bold hover:underline">{title}</h3>
+          <h3 className="text-xl font-bold text-zinc-800 hover:underline dark:text-zinc-100">
+            {title}
+          </h3>
         </Link>
       )}
       <ListNavbarRename setRename={setIsEditing} />

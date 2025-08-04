@@ -1,6 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import useCardData from "@/hooks/use-cards-data";
 import { updateCardTitleSchema } from "@/schemas/card-schema";
 import { useAuth } from "@clerk/nextjs";
@@ -69,28 +70,34 @@ export const CardModalHeader = ({
   };
 
   return (
-    <div>
-      <div className="flex items-center gap-2">
-        <PanelsTopLeft size={20} />
-        {isRename ? (
-          <form onSubmit={updateCardTitle}>
-            <Input
-              className="w-[300px]"
-              onBlur={() => setIsRename(false)}
-              placeholder="Enter a new title for this card..."
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-            />
-          </form>
-        ) : (
-          <h4
-            className="text-lg font-bold text-zinc-700 dark:text-zinc-200"
-            onClick={() => setIsRename(true)}
-          >
-            {card?.title}
-          </h4>
-        )}
-      </div>
-    </div>
+    <>
+      {!card?.title ? (
+        <Skeleton className="h-[20px] w-[200px]"></Skeleton>
+      ) : (
+        <div>
+          <div className="flex items-center gap-2">
+            <PanelsTopLeft size={20} />
+            {isRename ? (
+              <form onSubmit={updateCardTitle}>
+                <Input
+                  className="w-[300px]"
+                  onBlur={() => setIsRename(false)}
+                  placeholder="Enter a new title for this card..."
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                />
+              </form>
+            ) : (
+              <h4
+                className="text-lg font-bold text-zinc-700 dark:text-zinc-200"
+                onClick={() => setIsRename(true)}
+              >
+                {card?.title}
+              </h4>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };

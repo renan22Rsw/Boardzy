@@ -15,7 +15,7 @@ import { CreateWorkspace } from "./create-workspace";
 import { AccordianItems } from "./accordian-items";
 import { Organization } from "@/types/organization";
 import { usePathname } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
+import { SidebarSkeleton } from "./sidebar-skeleton";
 
 export const AppSidebar = () => {
   const { isLoaded } = useOrganization();
@@ -28,32 +28,39 @@ export const AppSidebar = () => {
       },
     });
 
-  if (!isLoaded || !isUserMembershipsLoaded || userMemberships.isLoading) {
-    return <Skeleton />;
-  }
-
   return (
     !pathName.includes("board") && (
       <Sidebar variant="sidebar" className="pt-4">
         <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel className="font-bold">
-              Workspacess
-            </SidebarGroupLabel>
-            <SidebarGroupAction title="Add Project" className="hidden lg:block">
-              <CreateWorkspace />
-              <span className="sr-only">Add Project</span>
-            </SidebarGroupAction>
-          </SidebarGroup>
-          <Accordion type="multiple">
-            {userMemberships.data.map(({ organization }) => (
-              <AccordianItems
-                pathname={pathName as string}
-                key={organization?.id}
-                organization={organization as Organization}
-              />
-            ))}
-          </Accordion>
+          {!isLoaded ||
+          !isUserMembershipsLoaded ||
+          userMemberships.isLoading ? (
+            <SidebarSkeleton />
+          ) : (
+            <>
+              <SidebarGroup>
+                <SidebarGroupLabel className="font-bold">
+                  Workspacess
+                </SidebarGroupLabel>
+                <SidebarGroupAction
+                  title="Add Project"
+                  className="hidden lg:block"
+                >
+                  <CreateWorkspace />
+                  <span className="sr-only">Add Project</span>
+                </SidebarGroupAction>
+              </SidebarGroup>
+              <Accordion type="multiple">
+                {userMemberships.data.map(({ organization }) => (
+                  <AccordianItems
+                    pathname={pathName as string}
+                    key={organization?.id}
+                    organization={organization as Organization}
+                  />
+                ))}
+              </Accordion>
+            </>
+          )}
         </SidebarContent>
       </Sidebar>
     )

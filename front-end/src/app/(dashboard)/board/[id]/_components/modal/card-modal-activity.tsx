@@ -8,11 +8,13 @@ import { Activity } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { CardActivityMessage } from "./card-acitivity-message";
 import { Logs } from "@/types/logs";
+import { CardModalActivitySkeleton } from "./card-modal-activity-skeleton";
 
 export const CardModalActivity = ({ listId }: { listId: string }) => {
   const { getToken } = useAuth();
   const { cards } = useCardData(listId);
   const [logs, setLogs] = useState<Logs[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchCardsLogs = useCallback(async () => {
     const { id } = cards as Card;
@@ -40,6 +42,9 @@ export const CardModalActivity = ({ listId }: { listId: string }) => {
   useEffect(() => {
     if (cards) {
       fetchCardsLogs();
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     }
   }, [cards, fetchCardsLogs]);
 
@@ -54,9 +59,11 @@ export const CardModalActivity = ({ listId }: { listId: string }) => {
             </h6>
           </div>
           <div>
-            {logs.map((item) => (
-              <CardActivityMessage data={item} key={item.id} />
-            ))}
+            {isLoading ? (
+              <CardModalActivitySkeleton />
+            ) : (
+              logs.map((log) => <CardActivityMessage data={log} key={log.id} />)
+            )}
           </div>
         </>
       )}
