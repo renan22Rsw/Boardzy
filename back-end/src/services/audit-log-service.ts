@@ -1,5 +1,5 @@
 import db from "../db";
-import { ACTION, ENTITY_TYPE } from "../generated/prisma";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
 export interface Props {
   entityId: string;

@@ -1,7 +1,7 @@
 import express from "express";
+
 import { CardService } from "../services/card-service";
 import { CardController } from "../controllers/card-controller";
-import { requireAuth } from "@clerk/express";
 import { AuditLogService } from "../services/audit-log-service";
 
 export const cardRouter = express.Router();
@@ -9,8 +9,6 @@ export const cardRouter = express.Router();
 const cardService = new CardService();
 const auditLogService = new AuditLogService();
 const cardController = new CardController(cardService, auditLogService);
-
-cardRouter.use(requireAuth());
 
 cardRouter.post("/cards", (req, res) => cardController.createCard(req, res));
 

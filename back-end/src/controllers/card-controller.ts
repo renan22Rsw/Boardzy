@@ -2,7 +2,7 @@ import { clerkClient, getAuth } from "@clerk/express";
 import { CardService } from "../services/card-service";
 import { Request, Response } from "express";
 import { AuditLogService } from "../services/audit-log-service";
-import { ACTION, ENTITY_TYPE } from "../generated/prisma";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
 export class CardController {
   constructor(

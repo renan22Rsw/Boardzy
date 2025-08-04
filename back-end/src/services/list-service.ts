@@ -40,6 +40,10 @@ export class ListService {
 
   async getLists(boardId: string, orgId: string) {
     try {
+      if (!orgId) {
+        throw new Error("Organization Id is required");
+      }
+
       const lists = await db.list.findMany({
         where: {
           boardId,
@@ -103,6 +107,10 @@ export class ListService {
 
   async updateListOrder(items: { id: string; order: number }[], orgId: string) {
     try {
+      if (!orgId) {
+        throw new Error("Organization Id is required");
+      }
+
       let lists;
       const transaction = items.map((list) =>
         db.list.update({

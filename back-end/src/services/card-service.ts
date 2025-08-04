@@ -1,5 +1,4 @@
 import db from "../db";
-import { Props } from "./audit-log-service";
 
 /**
  * Service for manipulating cards
@@ -116,6 +115,10 @@ export class CardService {
     orgId: string
   ) {
     try {
+      if (!orgId) {
+        throw new Error("Organization Id is required");
+      }
+
       let cards;
 
       const transaction = items.map((card) =>

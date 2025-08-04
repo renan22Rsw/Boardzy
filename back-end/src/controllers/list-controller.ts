@@ -2,7 +2,7 @@ import { clerkClient, getAuth } from "@clerk/express";
 import { ListService } from "../services/list-service";
 import { Request, Response } from "express";
 import { AuditLogService } from "../services/audit-log-service";
-import { ACTION, ENTITY_TYPE } from "../generated/prisma";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
 export class ListController {
   constructor(

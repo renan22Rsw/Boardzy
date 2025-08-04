@@ -1,11 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+
 import { clerkMiddleware } from "@clerk/express";
-import { router } from "./routes/boards-route";
+import { requireAuth } from "@clerk/express";
+
+import { boardRouter } from "./routes/boards-route";
 import { listRouter } from "./routes/lists-route";
 import { cardRouter } from "./routes/cards-route";
 import { auditLogRouter } from "./routes/audit-log-route";
+import { orgIdMiddleware } from "./middleware";
 
 dotenv.config();
 
@@ -21,8 +25,10 @@ app.use(
   })
 );
 app.use(clerkMiddleware());
+app.use(requireAuth());
+app.use(orgIdMiddleware);
 
-app.use("/api", router);
+app.use("/api", boardRouter);
 app.use("/api", listRouter);
 app.use("/api", cardRouter);
 app.use("/api", auditLogRouter);
