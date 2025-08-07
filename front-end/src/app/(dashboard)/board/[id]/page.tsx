@@ -5,7 +5,11 @@ import { ListSection } from "./_components/list-section";
 import { getBoardList } from "@/lib/api/get-board-lists";
 import { BoardIdPageContainer } from "./_components/container";
 
-const BoardIdPage = async ({ params }: { params: { id: string } }) => {
+interface BoardIdPageProps {
+  params: Promise<{ id: string }>;
+}
+
+const BoardIdPage = async ({ params }: BoardIdPageProps) => {
   const { id } = await params;
   const board = await getBoardById(id);
   const list = await getBoardList(id);
