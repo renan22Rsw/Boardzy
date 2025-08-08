@@ -6,7 +6,7 @@ const isProtectedRoute = createRouteMatcher([
   "/select-org",
   "/board(.*)",
 ]);
-const isPublicRoute = createRouteMatcher(["/signup", "/login"]);
+const isPublicRoute = createRouteMatcher(["/", "/signup", "/login"]);
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, orgId } = await auth();
