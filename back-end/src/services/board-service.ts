@@ -3,7 +3,7 @@ import db from "../db";
 export class BoardService {
   async createBoard(title: string, color: string, orgId: string) {
     try {
-      if (!orgId) throw new Error("Organization Id is required");
+      if (!orgId) throw new Error("Organization id is required");
 
       const boardLength = await db.board.count({
         where: {
@@ -33,7 +33,7 @@ export class BoardService {
   }
 
   async getBoards(orgId: string) {
-    if (!orgId) throw new Error("Organization Id is required");
+    if (!orgId) throw new Error("Organization id is required");
 
     try {
       const boards = await db.board.findMany({
@@ -69,8 +69,10 @@ export class BoardService {
   }
 
   async updateBoardTitle(id: string, title: string) {
+    if (!id) throw new Error("Board id is required");
+
     try {
-      await db.board.update({
+      const updatedTitle = await db.board.update({
         where: {
           id,
         },
@@ -78,6 +80,8 @@ export class BoardService {
           title,
         },
       });
+
+      return updatedTitle;
     } catch (err) {
       if (err instanceof Error) {
         throw Error(err.message);
@@ -87,6 +91,7 @@ export class BoardService {
   }
 
   async deleteBoard(id: string) {
+    if (!id) throw new Error("Board id is required");
     try {
       await db.board.delete({
         where: {
