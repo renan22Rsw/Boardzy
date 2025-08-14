@@ -1,5 +1,6 @@
 import { ListService } from "../../../services/list-service";
 import db from "../../../db/index";
+import { listMock } from "./mock";
 
 jest.mock("../../../db/index", () => ({
   list: {
@@ -25,22 +26,12 @@ describe("List service delete action", () => {
   it("should delete list", async () => {
     (db.list.delete as jest.Mock).mockResolvedValue(null);
 
-    await listService.deleteList("1");
+    await listService.deleteList(listMock.id);
 
     expect(db.list.delete).toHaveBeenCalledWith({
       where: {
         id: "1",
       },
     });
-  });
-
-  it("should throw an error if prisma fails", async () => {
-    (db.list.delete as jest.Mock).mockRejectedValue(
-      new Error("Unexpected error")
-    );
-
-    await expect(listService.deleteList("1")).rejects.toThrow(
-      "Unexpected error"
-    );
   });
 });

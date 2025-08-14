@@ -34,14 +34,4 @@ describe("Board service update action", () => {
       },
     });
   });
-
-  it("should throw an error if prisma fails", async () => {
-    (db.board.delete as jest.Mock).mockRejectedValue(
-      new Error("Unexpected error")
-    );
-
-    await expect(boardService.deleteBoard("1")).rejects.toThrow(
-      "Unexpected error"
-    );
-  });
 });

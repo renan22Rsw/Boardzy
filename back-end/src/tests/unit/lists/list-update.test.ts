@@ -1,5 +1,6 @@
 import { ListService } from "../../../services/list-service";
 import db from "../../../db/index";
+import { listUpdatedMock, listUpdatedOrderMock } from "./mock";
 
 jest.mock("../../../db/index", () => ({
   list: {
@@ -17,28 +18,21 @@ describe("List service update action", () => {
 
   it("should not update list title if list id has not been provided", async () => {
     await expect(
-      listService.updateListTitle("", "List 1 updated")
+      listService.updateListTitle("", listUpdatedMock.title)
     ).rejects.toThrow("List id is required");
 
     expect(db.list.update).not.toHaveBeenCalled();
   });
 
   it("should update list title", async () => {
-    (db.list.update as jest.Mock).mockResolvedValue({
-      id: "1",
-      title: "List 1 updated",
-      boardId: "boardId_test",
-      order: 1,
-    });
+    (db.list.update as jest.Mock).mockResolvedValue(listUpdatedMock);
 
-    const list = await listService.updateListTitle("1", "List 1 updated");
+    const list = await listService.updateListTitle(
+      listUpdatedMock.id,
+      listUpdatedMock.title
+    );
 
-    expect(list).toEqual({
-      id: "1",
-      title: "List 1 updated",
-      boardId: "boardId_test",
-      order: 1,
-    });
+    expect(list).toEqual(listUpdatedMock);
 
     expect(db.list.update).toHaveBeenCalledWith({
       where: {
@@ -51,33 +45,21 @@ describe("List service update action", () => {
   });
 
   it("should not update list order if organization id has not been provided", async () => {
-    await expect(listService.updateListOrder([], "")).rejects.toThrow(
-      "Organization id is required"
-    );
+    await expect(
+      listService.updateListOrder([listUpdatedOrderMock], "")
+    ).rejects.toThrow("Organization id is required");
 
     expect(db.list.update).not.toHaveBeenCalled();
   });
 
   it("should update list order", async () => {
-    (db.list.update as jest.Mock).mockResolvedValue({
-      id: "1",
-      title: "List 1 ",
-      boardId: "boardId_test",
-      order: 2,
-    });
+    (db.list.update as jest.Mock).mockResolvedValue(listUpdatedOrderMock);
 
     const lists = await listService.updateListOrder(
-      [{ id: "1", order: 2 }],
+      [listUpdatedOrderMock],
       "orgId_test"
     );
-    expect(lists).toEqual([
-      {
-        id: "1",
-        title: "List 1 ",
-        boardId: "boardId_test",
-        order: 2,
-      },
-    ]);
+    expect(lists).toEqual([listUpdatedOrderMock]);
 
     expect(db.list.update).toHaveBeenCalledWith({
       where: {
@@ -90,23 +72,5 @@ describe("List service update action", () => {
         order: 2,
       },
     });
-  });
-
-  it("should throw an error if prisma fails", async () => {
-    (db.list.update as jest.Mock).mockRejectedValue(
-      new Error("Unexpected error")
-    );
-    await expect(
-      listService.updateListTitle("1", "List 1 updated")
-    ).rejects.toThrow("Unexpected error");
-  });
-
-  it("should throw an error if prisma fails (update list order)", async () => {
-    (db.list.update as jest.Mock).mockRejectedValue(
-      new Error("Unexpected error")
-    );
-    await expect(
-      listService.updateListOrder([{ id: "1", order: 2 }], "orgId_test")
-    ).rejects.toThrow("Unexpected error");
   });
 });

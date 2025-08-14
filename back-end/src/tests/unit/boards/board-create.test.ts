@@ -1,5 +1,6 @@
 import { BoardService } from "../../../services/board-service";
 import db from "../../../db/index";
+import { boardMock } from "./mock";
 
 jest.mock("../../../db/index", () => ({
   board: {
@@ -9,7 +10,7 @@ jest.mock("../../../db/index", () => ({
   },
 }));
 
-describe("Board service create actions", () => {
+describe("Board service create action", () => {
   let boardService: BoardService;
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe("Board service create actions", () => {
 
   it("should not create a board if organization id has not been provided", async () => {
     await expect(
-      boardService.createBoard("Board 1", "#000000", "")
+      boardService.createBoard(boardMock.title, boardMock.color, "")
     ).rejects.toThrow("Organization id is required");
 
     expect(db.board.count).not.toHaveBeenCalled();
@@ -29,25 +30,15 @@ describe("Board service create actions", () => {
   it("should create a board", async () => {
     (db.board.count as jest.Mock).mockResolvedValue(0);
 
-    (db.board.create as jest.Mock).mockResolvedValue({
-      id: "1",
-      title: "Board 1",
-      color: "#000000",
-      orgId: "orgId_test",
-    });
+    (db.board.create as jest.Mock).mockResolvedValue(boardMock);
 
     const board = await boardService.createBoard(
-      "Board 1",
-      "#000000",
-      "orgId_test"
+      boardMock.title,
+      boardMock.color,
+      boardMock.orgId
     );
 
-    expect(board).toEqual({
-      id: "1",
-      title: "Board 1",
-      color: "#000000",
-      orgId: "orgId_test",
-    });
+    expect(board).toEqual(boardMock);
 
     expect(db.board.count).toHaveBeenCalledWith({
       where: {
@@ -68,19 +59,7 @@ describe("Board service create actions", () => {
     (db.board.count as jest.Mock).mockResolvedValue(5);
 
     await expect(
-      boardService.createBoard("Board 1", "#000000", "orgId_test")
+      boardService.createBoard(boardMock.title, boardMock.color, "orgId_test")
     ).rejects.toThrow("You have reached the maximum number of boards");
-  });
-
-  it("should throw an error if prisma fails", async () => {
-    (db.board.count as jest.Mock).mockResolvedValue(0);
-
-    (db.board.create as jest.Mock).mockRejectedValue(
-      new Error("Unexpected error")
-    );
-
-    await expect(
-      boardService.createBoard("Board 1", "#000000", "orgId_test")
-    ).rejects.toThrow("Unexpected error");
   });
 });

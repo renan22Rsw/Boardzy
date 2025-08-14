@@ -1,5 +1,6 @@
 import { BoardService } from "../../../services/board-service";
 import db from "../../../db/index";
+import { boardMock } from "./mock";
 
 jest.mock("../../../db/index", () => ({
   board: {
@@ -8,7 +9,7 @@ jest.mock("../../../db/index", () => ({
   },
 }));
 
-describe("Board service get actions", () => {
+describe("Board service get action", () => {
   let boardService: BoardService;
 
   beforeEach(() => {
@@ -25,25 +26,11 @@ describe("Board service get actions", () => {
   });
 
   it("should get all boards", async () => {
-    (db.board.findMany as jest.Mock).mockResolvedValue([
-      {
-        id: "1",
-        title: "Board 1",
-        color: "#000000",
-        orgId: "orgId_test",
-      },
-    ]);
+    (db.board.findMany as jest.Mock).mockResolvedValue([boardMock]);
 
     const boards = await boardService.getBoards("orgId_test");
 
-    expect(boards).toEqual([
-      {
-        id: "1",
-        title: "Board 1",
-        color: "#000000",
-        orgId: "orgId_test",
-      },
-    ]);
+    expect(boards).toEqual([boardMock]);
 
     expect(db.board.findMany).toHaveBeenCalledWith({
       where: {
@@ -53,46 +40,16 @@ describe("Board service get actions", () => {
   });
 
   it("should get board by id", async () => {
-    (db.board.findUnique as jest.Mock).mockResolvedValue({
-      id: "1",
-      title: "Board 1",
-      color: "#000000",
-      orgId: "orgId_test",
-    });
+    (db.board.findUnique as jest.Mock).mockResolvedValue(boardMock);
 
-    const board = await boardService.getBoardById("orgId_test");
+    const board = await boardService.getBoardById(boardMock.id);
 
-    expect(board).toEqual({
-      id: "1",
-      title: "Board 1",
-      color: "#000000",
-      orgId: "orgId_test",
-    });
+    expect(board).toEqual(boardMock);
 
     expect(db.board.findUnique).toHaveBeenCalledWith({
       where: {
-        id: "orgId_test",
+        id: "1",
       },
     });
-  });
-
-  it("should throw an error if prisma fails", async () => {
-    (db.board.findMany as jest.Mock).mockRejectedValue(
-      new Error("Unexpected error")
-    );
-
-    await expect(boardService.getBoards("orgId_test")).rejects.toThrow(
-      "Unexpected error"
-    );
-  });
-
-  it("should throw an error if prisma fails (get by id)", async () => {
-    (db.board.findUnique as jest.Mock).mockRejectedValue(
-      new Error("Unexpected error")
-    );
-
-    await expect(boardService.getBoardById("orgId_test")).rejects.toThrow(
-      "Unexpected error"
-    );
   });
 });

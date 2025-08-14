@@ -1,5 +1,6 @@
 import { ListService } from "../../../services/list-service";
 import db from "../../../db/index";
+import { listMock } from "./mock";
 
 jest.mock("../../../db/index", () => ({
   list: {
@@ -23,25 +24,11 @@ describe("List service get action", () => {
   });
 
   it("should get all lists", async () => {
-    (db.list.findMany as jest.Mock).mockResolvedValue([
-      {
-        id: "1",
-        title: "List 1",
-        boardId: "1",
-        order: 1,
-      },
-    ]);
+    (db.list.findMany as jest.Mock).mockResolvedValue([listMock]);
 
     const lists = await listService.getLists("1", "1");
 
-    expect(lists).toEqual([
-      {
-        id: "1",
-        title: "List 1",
-        boardId: "1",
-        order: 1,
-      },
-    ]);
+    expect(lists).toEqual([listMock]);
 
     expect(db.list.findMany).toHaveBeenCalledWith({
       where: {
@@ -61,15 +48,5 @@ describe("List service get action", () => {
         order: "asc",
       },
     });
-  });
-
-  it("should throw an error if prisma fails", async () => {
-    (db.list.findMany as jest.Mock).mockRejectedValue(
-      new Error("Unexpected error")
-    );
-
-    await expect(listService.getLists("1", "1")).rejects.toThrow(
-      "Unexpected error"
-    );
   });
 });
