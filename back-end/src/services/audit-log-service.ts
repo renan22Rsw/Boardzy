@@ -9,7 +9,7 @@ export interface Props {
   user?: User;
 }
 
-interface User {
+export interface User {
   id: string;
   firstName: string;
   lastName: string;
@@ -20,12 +20,12 @@ export class AuditLogService {
   async createAuditLog(props: Props, orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       const { entityId, entityType, entityTitle, action, user } = props;
 
-      await db.auditLog.create({
+      const auditLogs = await db.auditLog.create({
         data: {
           orgId,
           entityId,
@@ -37,18 +37,20 @@ export class AuditLogService {
           userName: (user?.firstName + " " + user?.lastName) as string,
         },
       });
+
+      return auditLogs;
     } catch (err) {
       if (err instanceof Error) {
-        console.log(err.message);
+        throw Error(err.message);
       }
-      console.log(err);
+      throw new Error("Unexpected error");
     }
   }
 
   async getAllAuditLogs(orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       const auditLogs = await db.auditLog.findMany({
@@ -62,16 +64,16 @@ export class AuditLogService {
       return auditLogs;
     } catch (err) {
       if (err instanceof Error) {
-        console.log(err.message);
+        throw Error(err.message);
       }
-      console.log(err);
+      throw new Error("Unexpected error");
     }
   }
 
   async getCardAuditLogs(props: Props, orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       const { entityId, entityType } = props;
@@ -90,9 +92,9 @@ export class AuditLogService {
       return auditLogs;
     } catch (err) {
       if (err instanceof Error) {
-        console.log(err.message);
+        throw Error(err.message);
       }
-      console.log(err);
+      throw new Error("Unexpected error");
     }
   }
 }
