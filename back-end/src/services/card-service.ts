@@ -7,7 +7,7 @@ export class CardService {
   async createCard(title: string, listId: string, orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       const list = await db.list.findUnique({
@@ -58,7 +58,7 @@ export class CardService {
   async createCardDescription(id: string, description: string, orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       const card = await db.card.update({
@@ -87,7 +87,7 @@ export class CardService {
   async getCardById(listId: string, orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       const card = await db.card.findUnique({
@@ -116,7 +116,7 @@ export class CardService {
   ) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       let cards;
@@ -138,6 +138,7 @@ export class CardService {
         })
       );
       cards = await db.$transaction(transaction);
+      return cards;
     } catch (err) {
       if (err instanceof Error) {
         throw Error(err.message);
@@ -149,7 +150,7 @@ export class CardService {
   async updateCardTitle(id: string, title: string, orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       const card = await db.card.update({
@@ -178,7 +179,7 @@ export class CardService {
   async deleteCard(id: string, orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       await db.card.delete({
