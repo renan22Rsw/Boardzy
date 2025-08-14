@@ -4,7 +4,7 @@ export class ListService {
   async createList(title: string, boardId: string, orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       const lasList = await db.list.findFirst({
@@ -41,7 +41,7 @@ export class ListService {
   async getLists(boardId: string, orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       const lists = await db.list.findMany({
@@ -73,8 +73,12 @@ export class ListService {
   }
 
   async updateListTitle(id: string, title: string) {
+    if (!id) {
+      throw new Error("List id is required");
+    }
+
     try {
-      await db.list.update({
+      const list = await db.list.update({
         where: {
           id,
         },
@@ -82,21 +86,7 @@ export class ListService {
           title,
         },
       });
-    } catch (err) {
-      if (err instanceof Error) {
-        throw Error(err.message);
-      }
-      throw new Error("Unexpected error");
-    }
-  }
-
-  async deleteList(id: string) {
-    try {
-      await db.list.delete({
-        where: {
-          id,
-        },
-      });
+      return list;
     } catch (err) {
       if (err instanceof Error) {
         throw Error(err.message);
@@ -108,7 +98,7 @@ export class ListService {
   async updateListOrder(items: { id: string; order: number }[], orgId: string) {
     try {
       if (!orgId) {
-        throw new Error("Organization Id is required");
+        throw new Error("Organization id is required");
       }
 
       let lists;
@@ -129,6 +119,25 @@ export class ListService {
       lists = await db.$transaction(transaction);
 
       return lists;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw Error(err.message);
+      }
+      throw new Error("Unexpected error");
+    }
+  }
+
+  async deleteList(id: string) {
+    try {
+      if (!id) {
+        throw new Error("List id is required");
+      }
+      const list = await db.list.delete({
+        where: {
+          id,
+        },
+      });
+      return list;
     } catch (err) {
       if (err instanceof Error) {
         throw Error(err.message);
