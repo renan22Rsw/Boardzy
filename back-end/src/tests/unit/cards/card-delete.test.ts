@@ -1,5 +1,6 @@
 import { CardService } from "../../../services/card-service";
 import db from "../../../db/index";
+import { cardMock } from "./mock";
 
 jest.mock("../../../db/index", () => ({
   card: {
@@ -24,7 +25,7 @@ describe("Card service delete action", () => {
   });
 
   it("should delete card", async () => {
-    (db.card.delete as jest.Mock).mockResolvedValue(null);
+    (db.card.delete as jest.Mock).mockResolvedValue(cardMock);
 
     await cardService.deleteCard("1", "orgId_test");
 

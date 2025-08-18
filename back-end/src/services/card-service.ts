@@ -182,7 +182,7 @@ export class CardService {
         throw new Error("Organization id is required");
       }
 
-      await db.card.delete({
+      const card = await db.card.delete({
         where: {
           id,
           list: {
@@ -192,6 +192,7 @@ export class CardService {
           },
         },
       });
+      return card;
     } catch (err) {
       if (err instanceof Error) {
         throw Error(err.message);

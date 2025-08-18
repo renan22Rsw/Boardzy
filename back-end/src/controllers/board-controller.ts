@@ -119,7 +119,7 @@ export class BoardController {
         orgId as string
       );
 
-      return res.send({
+      return res.status(200).send({
         message: `The title of your board ${title} has been updated`,
       });
     } catch (err) {

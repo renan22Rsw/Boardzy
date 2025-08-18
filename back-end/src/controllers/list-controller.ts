@@ -117,10 +117,6 @@ export class ListController {
     const { orgId } = getAuth(req);
 
     try {
-      if (!orgId) {
-        return res.status(401).send({ error: "Unauthorized" });
-      }
-
       await this.listService.updateListOrder(items, orgId as string);
 
       return res.status(200).send({

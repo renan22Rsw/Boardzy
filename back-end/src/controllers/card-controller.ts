@@ -139,10 +139,6 @@ export class CardController {
     const { orgId } = getAuth(req);
 
     try {
-      if (!orgId) {
-        return res.status(401).send({ error: "Unauthorized" });
-      }
-
       await this.cardService.updateCardOrder(items, orgId as string);
 
       return res.status(200).send({
