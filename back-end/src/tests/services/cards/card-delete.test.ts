@@ -1,6 +1,6 @@
 import { CardService } from "../../../services/card-service";
 import db from "../../../db/index";
-import { cardMock } from "./mock";
+import { cardMock } from "../mock";
 
 jest.mock("../../../db/index", () => ({
   card: {

@@ -1,11 +1,6 @@
 import { CardService } from "../../../../services/card-service";
 import db from "../../../../db/index";
-import {
-  cardMock,
-  cardDescriptionMock,
-  cardUpdatedMock,
-  cardUpdatedOrderMock,
-} from "../mock";
+import { cardMock } from "../../mock";
 
 jest.mock("../../../../db/index", () => ({
   card: {
@@ -22,6 +17,12 @@ jest.mock("../../../../db/index", () => ({
 }));
 
 describe("Card prisma erros", () => {
+  const cardUpdatedOrderMock = {
+    ...cardMock,
+    order: 2,
+    listId: "listId_test",
+  };
+
   let cardService: CardService;
 
   beforeEach(() => {
@@ -46,8 +47,8 @@ describe("Card prisma erros", () => {
 
     await expect(
       cardService.createCardDescription(
-        cardDescriptionMock.id,
-        cardDescriptionMock.description,
+        cardMock.id,
+        "Description 1",
         "orgId_test"
       )
     ).rejects.toThrow("Unexpected error");
@@ -69,11 +70,7 @@ describe("Card prisma erros", () => {
     );
 
     await expect(
-      cardService.updateCardTitle(
-        cardUpdatedMock.id,
-        cardUpdatedMock.title,
-        "orgId_test"
-      )
+      cardService.updateCardTitle(cardMock.id, "Card 1 updated", "orgId_test")
     ).rejects.toThrow("Unexpected error");
   });
 

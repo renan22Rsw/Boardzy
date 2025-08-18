@@ -1,11 +1,6 @@
 import { CardService } from "../../../../services/card-service";
 import db from "../../../../db/index";
-import {
-  cardMock,
-  cardDescriptionMock,
-  cardUpdatedMock,
-  cardUpdatedOrderMock,
-} from "../mock";
+import { cardMock } from "../../mock";
 
 jest.mock("../../../../db/index", () => ({
   card: {
@@ -23,6 +18,12 @@ jest.mock("../../../../db/index", () => ({
 
 describe("Card service erros", () => {
   let cardService: CardService;
+
+  const cardUpdatedOrderMock = {
+    ...cardMock,
+    order: 2,
+    listId: "listId_test",
+  };
 
   beforeEach(() => {
     cardService = new CardService();
@@ -43,8 +44,8 @@ describe("Card service erros", () => {
 
     await expect(
       cardService.createCardDescription(
-        cardDescriptionMock.id,
-        cardDescriptionMock.description,
+        cardMock.id,
+        "Description 1",
         "orgId_test"
       )
     ).rejects.toThrow("Unexpected error");
@@ -62,11 +63,7 @@ describe("Card service erros", () => {
     (db.card.update as jest.Mock).mockRejectedValue("Unexpected error");
 
     await expect(
-      cardService.updateCardTitle(
-        cardUpdatedMock.id,
-        cardUpdatedMock.title,
-        "orgId_test"
-      )
+      cardService.updateCardTitle(cardMock.id, "Card 1 updated", "orgId_test")
     ).rejects.toThrow("Unexpected error");
   });
 

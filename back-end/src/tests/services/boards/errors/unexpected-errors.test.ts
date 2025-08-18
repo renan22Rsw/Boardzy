@@ -1,6 +1,6 @@
 import { BoardService } from "../../../../services/board-service";
 import db from "../../../../db/index";
-import { boardMock, boardMockUpdated } from "../mock";
+import { boardMock } from "../../mock";
 
 jest.mock("../../../../db/index", () => ({
   board: {
@@ -15,6 +15,12 @@ jest.mock("../../../../db/index", () => ({
 
 describe("Board service errors", () => {
   let boardService: BoardService;
+
+  const boardUpdatedTitle = {
+    ...boardMock,
+    title: "Board 1 updated",
+  };
+
   beforeEach(() => {
     boardService = new BoardService();
     jest.clearAllMocks();
@@ -48,7 +54,10 @@ describe("Board service errors", () => {
     (db.board.update as jest.Mock).mockRejectedValue("Unexpected error");
 
     await expect(
-      boardService.updateBoardTitle(boardMockUpdated.id, boardMockUpdated.title)
+      boardService.updateBoardTitle(
+        boardUpdatedTitle.id,
+        boardUpdatedTitle.title
+      )
     ).rejects.toThrow("Unexpected error");
   });
 

@@ -1,6 +1,6 @@
 import { ListService } from "../../../../services/list-service";
 import db from "../../../../db/index";
-import { listMock, listUpdatedMock, listUpdatedOrderMock } from "../mock";
+import { listMock } from "../../mock";
 
 jest.mock("../../../../db/index", () => ({
   list: {
@@ -15,6 +15,11 @@ jest.mock("../../../../db/index", () => ({
 
 describe("List service erros", () => {
   let listService: ListService;
+
+  const listUpdatedOrderMock = {
+    ...listMock,
+    order: 2,
+  };
 
   beforeEach(() => {
     listService = new ListService();
@@ -40,7 +45,7 @@ describe("List service erros", () => {
   it("should throw an error if list not found (update list title)", async () => {
     (db.list.update as jest.Mock).mockRejectedValue("Unexpected error");
     await expect(
-      listService.updateListTitle(listUpdatedMock.id, listUpdatedMock.title)
+      listService.updateListTitle(listMock.id, "List 1 updated")
     ).rejects.toThrow("Unexpected error");
   });
 

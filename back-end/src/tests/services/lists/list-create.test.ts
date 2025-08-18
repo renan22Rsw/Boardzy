@@ -1,6 +1,6 @@
 import { ListService } from "../../../services/list-service";
 import db from "../../../db/index";
-import { listMock } from "./mock";
+import { listMock } from "../mock";
 
 jest.mock("../../../db/index", () => ({
   list: {
