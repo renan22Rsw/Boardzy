@@ -13,6 +13,7 @@ export function ClerkThemeProvider({ children }: { children: ReactNode }) {
       appearance={{
         baseTheme: theme === "dark" ? dark : undefined,
       }}
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
       {children}
     </ClerkProvider>
