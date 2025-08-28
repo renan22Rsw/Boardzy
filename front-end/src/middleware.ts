@@ -8,21 +8,28 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 const isPublicRoute = createRouteMatcher(["/", "/signup", "/login"]);
 
-export default clerkMiddleware(async (auth, req) => {
-  const { userId, orgId } = await auth();
+const authorizedParties = ["https://boardzy.dpdns.org"];
 
-  if (!userId && isProtectedRoute(req)) {
-    return NextResponse.redirect(new URL("/signup", req.url));
-  }
+export default clerkMiddleware(
+  async (auth, req) => {
+    const { userId, orgId } = await auth();
 
-  if (userId && isPublicRoute(req)) {
-    return NextResponse.redirect(new URL("/select-org", req.url));
-  }
+    if (!userId && isProtectedRoute(req)) {
+      return NextResponse.redirect(new URL("/signup", req.url));
+    }
 
-  if (userId && !orgId && req.nextUrl.pathname !== "/select-org") {
-    return NextResponse.redirect(new URL("/select-org", req.url));
-  }
-});
+    if (userId && isPublicRoute(req)) {
+      return NextResponse.redirect(new URL("/select-org", req.url));
+    }
+
+    if (userId && !orgId && req.nextUrl.pathname !== "/select-org") {
+      return NextResponse.redirect(new URL("/select-org", req.url));
+    }
+  },
+  {
+    authorizedParties,
+  },
+);
 
 export const config = {
   matcher: [
