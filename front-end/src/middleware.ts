@@ -8,8 +8,6 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 const isPublicRoute = createRouteMatcher(["/", "/signup", "/login"]);
 
-const authorizedParties = ["https://boardzy.dpdns.org"];
-
 export default clerkMiddleware(
   async (auth, req) => {
     const { userId, orgId } = await auth();
@@ -27,7 +25,7 @@ export default clerkMiddleware(
     }
   },
   {
-    authorizedParties,
+    authorizedParties: ["https://boardzy.dpdns.org"],
   },
 );
 
